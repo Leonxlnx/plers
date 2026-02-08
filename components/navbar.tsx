@@ -1,28 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 export function Navbar() {
     return (
-        <nav className="nav-pill" style={{ transform: "translateY(-8px)" }}>
-            <span className="nav-brand">
+        <nav className="nav-card" style={{ opacity: 0, transform: "translateY(-6px)" }}>
+            <a href="/" className="nav-brand">
                 PLERS<span className="dot">.</span>
-            </span>
+            </a>
 
             <div className="nav-divider" />
 
-            <a href="#lab" className="nav-link">
-                <span className="nav-num">01</span> Lab
-            </a>
-            <a href="#ethics" className="nav-link">
-                <span className="nav-num">02</span> Ethics
-            </a>
-            <a href="#journal" className="nav-link">
-                <span className="nav-num">03</span> Journal
-            </a>
+            <div className="nav-links-group">
+                <a href="#research" className="nav-link">Research</a>
+                <a href="#pipeline" className="nav-link">Pipeline</a>
+                <a href="#about" className="nav-link">About</a>
+            </div>
 
-            <button className="nav-cta-circle" aria-label="Contact">
-                <svg viewBox="0 0 16 16" fill="none">
+            <button className="nav-cta-btn">
+                Get in touch
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
                     <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
             </button>

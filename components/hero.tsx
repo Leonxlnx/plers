@@ -16,7 +16,7 @@ export function Hero() {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
 
-            // Ken Burns — stronger zoom + drift + brightness shift
+            // Ken Burns — stronger zoom + drift
             gsap.fromTo(
                 imgRef.current,
                 { scale: 1.0, x: "0%", filter: "brightness(0.65)" },
@@ -31,10 +31,13 @@ export function Hero() {
                 }
             );
 
-            // Label
-            tl.to(labelRef.current, { opacity: 1, duration: 0.7 });
+            // Nav card
+            tl.to(".nav-card", { opacity: 1, y: 0, duration: 0.6 });
 
-            // Headline lines
+            // Label
+            tl.to(labelRef.current, { opacity: 1, duration: 0.7 }, "-=0.3");
+
+            // Headline
             const lines = headlineRef.current?.querySelectorAll(".line-inner");
             if (lines) {
                 tl.to(lines, { y: "0%", duration: 1.0, stagger: 0.07 }, "-=0.3");
@@ -46,11 +49,8 @@ export function Hero() {
             // CTA
             tl.to(ctaRef.current, { opacity: 1, y: 0, duration: 0.5 }, "-=0.3");
 
-            // Bento grid — slides in from right
-            tl.to(bentoRef.current, { opacity: 1, x: 0, duration: 1.0, ease: "power2.out" }, "-=0.8");
-
-            // Nav pill
-            tl.to(".nav-pill", { opacity: 1, y: 0, duration: 0.7 }, "-=0.6");
+            // Bento
+            tl.to(bentoRef.current, { opacity: 1, x: 0, duration: 1.0, ease: "power2.out" }, "-=0.7");
         }, containerRef);
 
         return () => ctx.revert();
@@ -75,7 +75,7 @@ export function Hero() {
                 <div className="hero-text">
                     <div className="hero-label" ref={labelRef}>
                         <div className="hero-label-line" />
-                        <span>Biosciences · Zürich</span>
+                        <span>Biosciences · Zürich, Switzerland</span>
                     </div>
 
                     <h1 className="hero-headline" ref={headlineRef}>
@@ -102,7 +102,7 @@ export function Hero() {
                                 <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                         </button>
-                        <button className="btn-text">Learn more</button>
+                        <button className="btn-text">Our pipeline</button>
                     </div>
                 </div>
 
@@ -113,42 +113,41 @@ export function Hero() {
                     style={{ transform: "translateX(30px)" }}
                 >
                     <div className="hero-bento">
-                        {/* Cell 1: Image + diagonal stripes */}
+                        {/* Cell 1: Protein research image */}
                         <div className="bento-cell bento-img">
                             <img
                                 src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=600&auto=format&fit=crop&q=80"
-                                alt="Cell structure"
+                                alt="Protein synthesis visualization"
                                 loading="eager"
                             />
                             <div className="stripe-overlay" />
-                            <div className="bento-tag">Specimen 01</div>
+                            <div className="bento-tag">Protein Synthesis</div>
                         </div>
 
-                        {/* Cell 2: Stat */}
+                        {/* Cell 2: Real metric */}
                         <div className="bento-cell bento-stat">
-                            <span className="stat-number">10K×</span>
-                            <span className="stat-label">Faster Simulation</span>
+                            <span className="stat-number">98.7%</span>
+                            <span className="stat-label">Sequencing Accuracy</span>
                         </div>
 
-                        {/* Cell 3: Status */}
-                        <div className="bento-cell bento-status">
-                            <div className="status-dot" />
-                            <div className="status-text">
-                                <strong>Live</strong><br />
-                                Zürich Lab<br />
-                                Active
+                        {/* Cell 3: Research phase */}
+                        <div className="bento-cell bento-phase">
+                            <div className="phase-badge">Phase III</div>
+                            <div className="phase-text">
+                                <span className="phase-title">mRNA Therapeutics</span>
+                                <span className="phase-sub">Clinical trials · 2024</span>
                             </div>
                         </div>
 
-                        {/* Cell 4: Image + scan lines */}
+                        {/* Cell 4: Gene mapping image */}
                         <div className="bento-cell bento-img">
                             <img
                                 src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&auto=format&fit=crop&q=80"
-                                alt="Laboratory"
+                                alt="Gene mapping laboratory"
                                 loading="eager"
                             />
                             <div className="scanline-overlay" />
-                            <div className="bento-tag">Analysis</div>
+                            <div className="bento-tag">Gene Mapping</div>
                         </div>
                     </div>
                 </div>
