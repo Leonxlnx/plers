@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { Specimen } from "./specimen";
+import { Molecule } from "./molecule";
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -11,8 +11,7 @@ export function Hero() {
     const headlineRef = useRef<HTMLHeadingElement>(null);
     const descRef = useRef<HTMLParagraphElement>(null);
     const ctaRef = useRef<HTMLDivElement>(null);
-    const specimenRef = useRef<HTMLDivElement>(null);
-
+    const moleculeRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -48,13 +47,13 @@ export function Hero() {
             // CTA
             tl.to(ctaRef.current, { opacity: 1, y: 0, duration: 0.5 }, "-=0.3");
 
-            // Specimen — scale up + fade in
-            tl.to(specimenRef.current, {
+            // Molecule — scale up + fade in
+            tl.to(moleculeRef.current, {
                 opacity: 1,
                 scale: 1,
-                duration: 1.4,
+                duration: 1.6,
                 ease: "power2.out",
-            }, "-=0.8");
+            }, "-=0.9");
         }, containerRef);
 
         return () => ctx.revert();
@@ -110,13 +109,12 @@ export function Hero() {
                     </div>
                 </div>
 
-                {/* RIGHT — Specimen Viewer */}
+                {/* RIGHT — Molecule */}
                 <div
-                    className="hero-specimen-wrapper"
-                    ref={specimenRef}
-                    style={{ opacity: 0, transform: "scale(0.85)" }}
+                    className="hero-molecule-wrapper"
+                    ref={moleculeRef}
                 >
-                    <Specimen />
+                    <Molecule />
                 </div>
             </div>
         </section>
