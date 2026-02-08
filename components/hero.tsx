@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 
 export function Hero() {
@@ -10,36 +10,47 @@ export function Hero() {
     const headlineRef = useRef<HTMLHeadingElement>(null);
     const descRef = useRef<HTMLParagraphElement>(null);
     const ctaRef = useRef<HTMLDivElement>(null);
-    const glassRef = useRef<HTMLDivElement>(null);
+    const bentoRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
 
-            // Ken Burns zoom on image
+            // Ken Burns — stronger zoom + drift + brightness shift
             gsap.fromTo(
                 imgRef.current,
-                { scale: 1.0 },
-                { scale: 1.12, duration: 25, ease: "none", repeat: -1, yoyo: true }
+                { scale: 1.0, x: "0%", filter: "brightness(0.65)" },
+                {
+                    scale: 1.25,
+                    x: "-3%",
+                    filter: "brightness(0.8)",
+                    duration: 22,
+                    ease: "none",
+                    repeat: -1,
+                    yoyo: true,
+                }
             );
 
             // Label
-            tl.to(labelRef.current, { opacity: 1, duration: 0.8 });
+            tl.to(labelRef.current, { opacity: 1, duration: 0.7 });
 
             // Headline lines
             const lines = headlineRef.current?.querySelectorAll(".line-inner");
             if (lines) {
-                tl.to(lines, { y: "0%", duration: 1.0, stagger: 0.08 }, "-=0.4");
+                tl.to(lines, { y: "0%", duration: 1.0, stagger: 0.07 }, "-=0.3");
             }
 
             // Description
-            tl.to(descRef.current, { opacity: 1, y: 0, duration: 0.7 }, "-=0.4");
+            tl.to(descRef.current, { opacity: 1, y: 0, duration: 0.6 }, "-=0.4");
 
             // CTA
-            tl.to(ctaRef.current, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3");
+            tl.to(ctaRef.current, { opacity: 1, y: 0, duration: 0.5 }, "-=0.3");
 
-            // Glass card
-            tl.to(glassRef.current, { opacity: 1, x: 0, duration: 0.9, ease: "power2.out" }, "-=0.6");
+            // Bento grid — slides in from right
+            tl.to(bentoRef.current, { opacity: 1, x: 0, duration: 1.0, ease: "power2.out" }, "-=0.8");
+
+            // Nav pill
+            tl.to(".nav-pill", { opacity: 1, y: 0, duration: 0.7 }, "-=0.6");
         }, containerRef);
 
         return () => ctx.revert();
@@ -47,7 +58,7 @@ export function Hero() {
 
     return (
         <section className="hero" ref={containerRef}>
-            {/* BG Image */}
+            {/* BG */}
             <div className="hero-bg">
                 <img
                     ref={imgRef}
@@ -58,61 +69,88 @@ export function Hero() {
                 <div className="hero-vignette" />
             </div>
 
-            {/* Main Content — bottom left */}
-            <div className="hero-content">
-                <div className="hero-label" ref={labelRef}>
-                    <div className="hero-label-line" />
-                    <span>Biosciences · Zürich</span>
+            {/* Layout Grid */}
+            <div className="hero-layout">
+                {/* LEFT — Text */}
+                <div className="hero-text">
+                    <div className="hero-label" ref={labelRef}>
+                        <div className="hero-label-line" />
+                        <span>Biosciences · Zürich</span>
+                    </div>
+
+                    <h1 className="hero-headline" ref={headlineRef}>
+                        <span className="line">
+                            <span className="line-inner">Engineering</span>
+                        </span>
+                        <span className="line">
+                            <span className="line-inner accent">Nature&apos;s</span>
+                        </span>
+                        <span className="line">
+                            <span className="line-inner">Code.</span>
+                        </span>
+                    </h1>
+
+                    <p className="hero-desc" ref={descRef} style={{ transform: "translateY(12px)" }}>
+                        We combine computational biology with generative AI
+                        to decode — and redesign — the building blocks of life.
+                    </p>
+
+                    <div className="hero-cta" ref={ctaRef} style={{ transform: "translateY(10px)" }}>
+                        <button className="btn-pill">
+                            Explore research
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                        </button>
+                        <button className="btn-text">Learn more</button>
+                    </div>
                 </div>
 
-                <h1 className="hero-headline" ref={headlineRef}>
-                    <span className="line">
-                        <span className="line-inner">Engineering</span>
-                    </span>
-                    <span className="line">
-                        <span className="line-inner accent">Nature&apos;s</span>
-                    </span>
-                    <span className="line">
-                        <span className="line-inner">Code.</span>
-                    </span>
-                </h1>
+                {/* RIGHT — Bento Grid */}
+                <div
+                    className="hero-bento-wrapper"
+                    ref={bentoRef}
+                    style={{ transform: "translateX(30px)" }}
+                >
+                    <div className="hero-bento">
+                        {/* Cell 1: Image + diagonal stripes */}
+                        <div className="bento-cell bento-img">
+                            <img
+                                src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=600&auto=format&fit=crop&q=80"
+                                alt="Cell structure"
+                                loading="eager"
+                            />
+                            <div className="stripe-overlay" />
+                            <div className="bento-tag">Specimen 01</div>
+                        </div>
 
-                <p className="hero-desc" ref={descRef} style={{ transform: "translateY(12px)" }}>
-                    We combine computational biology with generative AI
-                    to decode — and redesign — the building blocks of life.
-                </p>
+                        {/* Cell 2: Stat */}
+                        <div className="bento-cell bento-stat">
+                            <span className="stat-number">10K×</span>
+                            <span className="stat-label">Faster Simulation</span>
+                        </div>
 
-                <div className="hero-cta" ref={ctaRef} style={{ transform: "translateY(10px)" }}>
-                    <button className="btn-primary">
-                        Explore research
-                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                    </button>
-                    <button className="btn-ghost">Learn more</button>
-                </div>
-            </div>
+                        {/* Cell 3: Status */}
+                        <div className="bento-cell bento-status">
+                            <div className="status-dot" />
+                            <div className="status-text">
+                                <strong>Live</strong><br />
+                                Zürich Lab<br />
+                                Active
+                            </div>
+                        </div>
 
-            {/* Glass Card — top right */}
-            <div
-                className="glass-card"
-                ref={glassRef}
-                style={{
-                    position: "absolute",
-                    top: "clamp(7rem, 14vh, 10rem)",
-                    right: "clamp(2rem, 5vw, 8rem)",
-                    width: "280px",
-                    transform: "translateX(30px)",
-                }}
-            >
-                <div className="glass-card-label">Current Focus</div>
-                <div className="glass-card-title">Bio-Algorithmic Growth</div>
-                <p className="glass-card-body">
-                    Generative models that predict protein folding 10,000× faster than traditional simulation.
-                </p>
-                <div className="glass-card-status">
-                    <span className="dot" />
-                    System Active
+                        {/* Cell 4: Image + scan lines */}
+                        <div className="bento-cell bento-img">
+                            <img
+                                src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&auto=format&fit=crop&q=80"
+                                alt="Laboratory"
+                                loading="eager"
+                            />
+                            <div className="scanline-overlay" />
+                            <div className="bento-tag">Analysis</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

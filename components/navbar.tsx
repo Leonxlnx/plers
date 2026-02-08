@@ -3,26 +3,29 @@
 import { useEffect, useState } from "react";
 
 export function Navbar() {
-    const [scrolled, setScrolled] = useState(false);
-
-    useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 40);
-        window.addEventListener("scroll", onScroll);
-        return () => window.removeEventListener("scroll", onScroll);
-    }, []);
-
     return (
-        <nav className={`nav${scrolled ? " scrolled" : ""}`}>
-            <a href="/" className="nav-brand">
+        <nav className="nav-pill" style={{ transform: "translateY(-8px)" }}>
+            <span className="nav-brand">
                 PLERS<span className="dot">.</span>
+            </span>
+
+            <div className="nav-divider" />
+
+            <a href="#lab" className="nav-link">
+                <span className="nav-num">01</span> Lab
+            </a>
+            <a href="#ethics" className="nav-link">
+                <span className="nav-num">02</span> Ethics
+            </a>
+            <a href="#journal" className="nav-link">
+                <span className="nav-num">03</span> Journal
             </a>
 
-            <ul className="nav-items">
-                <li><a href="#lab">Lab</a></li>
-                <li><a href="#ethics">Ethics</a></li>
-                <li><a href="#journal">Journal</a></li>
-                <li><button className="nav-contact">Contact</button></li>
-            </ul>
+            <button className="nav-cta-circle" aria-label="Contact">
+                <svg viewBox="0 0 16 16" fill="none">
+                    <path d="M4 12L12 4M12 4H6M12 4V10" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            </button>
         </nav>
     );
 }
