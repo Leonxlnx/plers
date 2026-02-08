@@ -15,6 +15,11 @@ export function Navbar() {
                 <a href="#about" className="nav-link">About</a>
             </div>
 
+            <div className="nav-status">
+                <div className="status-dot" />
+                <span className="status-text">Lab Active</span>
+            </div>
+
             <button className="nav-cta-btn">
                 Get in touch
                 <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
