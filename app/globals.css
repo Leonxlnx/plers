@@ -1,13 +1,15 @@
 /* ============================================
    PLERS — Pure CSS (no Tailwind)
+   Premium Biotech · Muted Sage Palette
    ============================================ */
 
 :root {
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Playfair Display", Georgia, serif;
-  --lime: #C8FF00;
-  --lime-glow: rgba(200, 255, 0, 0.25);
-  --lime-dim: rgba(200, 255, 0, 0.08);
+  --sage: #6B9E82;
+  --sage-light: #8BB89E;
+  --sage-glow: rgba(107, 158, 130, 0.22);
+  --sage-dim: rgba(107, 158, 130, 0.06);
 }
 
 /* ===== RESET ===== */
@@ -32,7 +34,7 @@ body {
 }
 
 ::selection {
-  background: rgba(200, 255, 0, 0.2);
+  background: rgba(107, 158, 130, 0.25);
   color: #fff;
 }
 
@@ -87,7 +89,7 @@ button {
 }
 
 .nav-brand .dot {
-  color: var(--lime);
+  color: var(--sage);
 }
 
 .nav-divider {
@@ -129,8 +131,8 @@ button {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #000;
-  background: var(--lime);
+  color: #fff;
+  background: var(--sage);
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 6px;
@@ -143,7 +145,8 @@ button {
 }
 
 .nav-cta-btn:hover {
-  box-shadow: 0 0 16px var(--lime-glow);
+  background: var(--sage-light);
+  box-shadow: 0 0 16px var(--sage-glow);
   transform: translateY(-1px);
 }
 
@@ -162,6 +165,19 @@ button {
   height: 100vh;
   height: 100svh;
   overflow: hidden;
+}
+
+/* Film grain overlay */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px;
 }
 
 /* Background image */
@@ -263,7 +279,7 @@ button {
 }
 
 .hero-headline .accent {
-  color: var(--lime);
+  color: var(--sage-light);
   font-style: italic;
   padding-left: clamp(0.8rem, 2.5vw, 3rem);
 }
@@ -292,8 +308,8 @@ button {
   font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.02em;
-  color: #000;
-  background: var(--lime);
+  color: #fff;
+  background: var(--sage);
   border: none;
   padding: 0.72rem 1.5rem;
   border-radius: 100px;
@@ -305,8 +321,9 @@ button {
 }
 
 .btn-pill:hover {
+  background: var(--sage-light);
   transform: translateY(-1px);
-  box-shadow: 0 6px 22px var(--lime-glow);
+  box-shadow: 0 6px 22px var(--sage-glow);
 }
 
 .btn-pill svg {
@@ -344,6 +361,22 @@ button {
   opacity: 0;
 }
 
+/* Fig label — scientific annotation */
+.bento-fig-label {
+  font-size: 0.48rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.25);
+  margin-bottom: 0.6rem;
+  opacity: 0;
+}
+
+.bento-fig-label em {
+  font-style: normal;
+  color: var(--sage);
+}
+
 .hero-bento {
   display: grid;
   grid-template-columns: 1.3fr 0.7fr;
@@ -354,8 +387,21 @@ button {
   aspect-ratio: 0.88;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(200, 255, 0, 0.1);
-  background: rgba(200, 255, 0, 0.06);
+  border: 1px solid rgba(107, 158, 130, 0.12);
+  background: rgba(107, 158, 130, 0.04);
+  animation: bento-breathe 5s ease-in-out infinite;
+}
+
+@keyframes bento-breathe {
+
+  0%,
+  100% {
+    border-color: rgba(107, 158, 130, 0.12);
+  }
+
+  50% {
+    border-color: rgba(107, 158, 130, 0.22);
+  }
 }
 
 /* Cell base */
@@ -371,12 +417,12 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: brightness(0.65) contrast(1.1) saturate(0.65) hue-rotate(40deg);
+  filter: brightness(0.65) contrast(1.1) saturate(0.7);
   transition: filter 0.5s ease, transform 0.5s ease;
 }
 
 .bento-img:hover img {
-  filter: brightness(0.8) contrast(1.05) saturate(0.75) hue-rotate(40deg);
+  filter: brightness(0.8) contrast(1.05) saturate(0.85);
   transform: scale(1.06);
 }
 
@@ -389,8 +435,8 @@ button {
   background: repeating-linear-gradient(-45deg,
       transparent,
       transparent 4px,
-      rgba(200, 255, 0, 0.05) 4px,
-      rgba(200, 255, 0, 0.05) 5px);
+      rgba(107, 158, 130, 0.04) 4px,
+      rgba(107, 158, 130, 0.04) 5px);
 }
 
 /* Horizontal scanline overlay */
@@ -402,8 +448,8 @@ button {
   background: repeating-linear-gradient(0deg,
       transparent,
       transparent 2px,
-      rgba(0, 0, 0, 0.18) 2px,
-      rgba(0, 0, 0, 0.18) 3px);
+      rgba(0, 0, 0, 0.15) 2px,
+      rgba(0, 0, 0, 0.15) 3px);
 }
 
 /* Tag */
@@ -416,12 +462,12 @@ button {
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--lime);
+  color: rgba(255, 255, 255, 0.55);
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(6px);
   padding: 0.2rem 0.45rem;
   border-radius: 3px;
-  border: 1px solid rgba(200, 255, 0, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 /* Stat cell */
@@ -433,14 +479,14 @@ button {
   justify-content: center;
   padding: 1rem;
   text-align: center;
-  background: linear-gradient(145deg, #0c1f14 0%, #081a0e 60%, #0a0f0c 100%);
+  background: linear-gradient(145deg, #0f1a14 0%, #0a140f 60%, #0a0f0c 100%);
 }
 
 .bento-stat::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, rgba(200, 255, 0, 0.04) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(107, 158, 130, 0.04) 1px, transparent 1px);
   background-size: 14px 14px;
   pointer-events: none;
 }
@@ -451,6 +497,11 @@ button {
   font-weight: 500;
   line-height: 1;
   color: #fff;
+}
+
+.stat-unit {
+  font-size: 1rem;
+  color: var(--sage);
 }
 
 .stat-label {
@@ -470,9 +521,9 @@ button {
   justify-content: center;
   align-items: flex-start;
   padding: 1rem;
-  background: linear-gradient(160deg, #0d1a14 0%, #091210 60%, #0a0c0a 100%);
+  background: linear-gradient(160deg, #0f1a14 0%, #0a130f 60%, #0a0c0a 100%);
   overflow: hidden;
-  gap: 0.6rem;
+  gap: 0.5rem;
 }
 
 .bento-phase::before {
@@ -483,7 +534,7 @@ button {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(200, 255, 0, 0.06) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(107, 158, 130, 0.07) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -492,8 +543,8 @@ button {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #000;
-  background: var(--lime);
+  color: #fff;
+  background: var(--sage);
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   line-height: 1.3;
@@ -520,6 +571,80 @@ button {
   color: rgba(255, 255, 255, 0.3);
 }
 
+/* Progress bar in phase cell */
+.phase-progress {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 2px;
+  margin-top: 0.2rem;
+  overflow: hidden;
+}
+
+.phase-progress-bar {
+  height: 100%;
+  width: 72%;
+  background: linear-gradient(90deg, var(--sage), var(--sage-light));
+  border-radius: 2px;
+  animation: progress-fill 1.6s ease-out 1.5s both;
+}
+
+@keyframes progress-fill {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 72%;
+  }
+}
+
+/* ============================================
+   SCROLL INDICATOR
+   ============================================ */
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0;
+}
+
+.scroll-indicator span {
+  font-size: 0.45rem;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.scroll-line {
+  width: 1px;
+  height: 28px;
+  background: linear-gradient(to bottom, rgba(107, 158, 130, 0.4), transparent);
+  animation: scroll-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scaleY(0.7);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
 /* ============================================
    RESPONSIVE
    ============================================ */
@@ -535,7 +660,7 @@ button {
 }
 
 @media (max-width: 768px) {
-  .nav-link {
+  .nav-links-group {
     display: none;
   }
 

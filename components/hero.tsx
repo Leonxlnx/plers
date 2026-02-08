@@ -11,12 +11,14 @@ export function Hero() {
     const descRef = useRef<HTMLParagraphElement>(null);
     const ctaRef = useRef<HTMLDivElement>(null);
     const bentoRef = useRef<HTMLDivElement>(null);
+    const figRef = useRef<HTMLDivElement>(null);
+    const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
 
-            // Ken Burns — stronger zoom + drift
+            // Ken Burns
             gsap.fromTo(
                 imgRef.current,
                 { scale: 1.0, x: "0%", filter: "brightness(0.65)" },
@@ -49,8 +51,14 @@ export function Hero() {
             // CTA
             tl.to(ctaRef.current, { opacity: 1, y: 0, duration: 0.5 }, "-=0.3");
 
+            // Fig label
+            tl.to(figRef.current, { opacity: 1, duration: 0.4 }, "-=0.5");
+
             // Bento
             tl.to(bentoRef.current, { opacity: 1, x: 0, duration: 1.0, ease: "power2.out" }, "-=0.7");
+
+            // Scroll indicator
+            tl.to(scrollRef.current, { opacity: 1, duration: 0.8 }, "-=0.3");
         }, containerRef);
 
         return () => ctx.revert();
@@ -107,13 +115,18 @@ export function Hero() {
                 </div>
 
                 {/* RIGHT — Bento Grid */}
-                <div
-                    className="hero-bento-wrapper"
-                    ref={bentoRef}
-                    style={{ transform: "translateX(30px)" }}
-                >
-                    <div className="hero-bento">
-                        {/* Cell 1: Protein research image */}
+                <div className="hero-bento-wrapper">
+                    {/* Scientific annotation */}
+                    <div className="bento-fig-label" ref={figRef}>
+                        <em>Fig. 1</em> — Active research overview
+                    </div>
+
+                    <div
+                        className="hero-bento"
+                        ref={bentoRef}
+                        style={{ transform: "translateX(20px)" }}
+                    >
+                        {/* Cell 1: Protein research */}
                         <div className="bento-cell bento-img">
                             <img
                                 src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=600&auto=format&fit=crop&q=80"
@@ -124,22 +137,25 @@ export function Hero() {
                             <div className="bento-tag">Protein Synthesis</div>
                         </div>
 
-                        {/* Cell 2: Real metric */}
+                        {/* Cell 2: Stat */}
                         <div className="bento-cell bento-stat">
-                            <span className="stat-number">98.7%</span>
+                            <span className="stat-number">98.7<span className="stat-unit">%</span></span>
                             <span className="stat-label">Sequencing Accuracy</span>
                         </div>
 
-                        {/* Cell 3: Research phase */}
+                        {/* Cell 3: Research phase + progress */}
                         <div className="bento-cell bento-phase">
                             <div className="phase-badge">Phase III</div>
                             <div className="phase-text">
                                 <span className="phase-title">mRNA Therapeutics</span>
                                 <span className="phase-sub">Clinical trials · 2024</span>
                             </div>
+                            <div className="phase-progress">
+                                <div className="phase-progress-bar" />
+                            </div>
                         </div>
 
-                        {/* Cell 4: Gene mapping image */}
+                        {/* Cell 4: Gene mapping */}
                         <div className="bento-cell bento-img">
                             <img
                                 src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&auto=format&fit=crop&q=80"
@@ -151,6 +167,12 @@ export function Hero() {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* Scroll Indicator */}
+            <div className="scroll-indicator" ref={scrollRef}>
+                <span>Scroll</span>
+                <div className="scroll-line" />
             </div>
         </section>
     );
