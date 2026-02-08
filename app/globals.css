@@ -514,6 +514,219 @@ button {
 }
 
 /* ============================================
+   RESEARCH SECTION
+   ============================================ */
+
+.research {
+  position: relative;
+  background: #050505;
+  padding: 0 4vw 8rem;
+}
+
+/* Transition — smooth gradient from hero to section */
+.section-transition {
+  height: 12rem;
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(5, 5, 5, 1) 100%);
+  margin-bottom: 2rem;
+}
+
+/* Header */
+.research-header {
+  max-width: 700px;
+  margin: 0 auto 5rem;
+  text-align: center;
+}
+
+.research-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.8rem;
+}
+
+.research-label-line {
+  width: 24px;
+  height: 1px;
+  background: var(--sage);
+}
+
+.research-label span {
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+.research-headline {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 4.2rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.research-headline .accent-dim {
+  color: rgba(255, 255, 255, 0.3);
+  font-style: italic;
+}
+
+.research-intro {
+  font-size: 0.9rem;
+  font-weight: 350;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.4);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Card Grid */
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Card */
+.research-card {
+  position: relative;
+  padding: 2.2rem 2rem 2rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+  overflow: hidden;
+}
+
+.research-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 0%,
+      rgba(107, 158, 130, 0.06) 0%,
+      transparent 60%);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+
+.research-card:hover {
+  border-color: rgba(107, 158, 130, 0.2);
+  transform: translateY(-4px);
+}
+
+.research-card:hover::before {
+  opacity: 1;
+}
+
+/* Card top — number + stat */
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.6rem;
+}
+
+.card-number {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--sage);
+  opacity: 0.7;
+}
+
+.card-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.1rem;
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.stat-label {
+  font-size: 0.42rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* Card content */
+.card-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #fff;
+  margin-bottom: 0.8rem;
+  line-height: 1.3;
+}
+
+.card-desc {
+  font-size: 0.82rem;
+  font-weight: 350;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 1.5rem;
+}
+
+/* Tags */
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.research-tag {
+  font-size: 0.5rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(107, 158, 130, 0.8);
+  background: rgba(107, 158, 130, 0.08);
+  border: 1px solid rgba(107, 158, 130, 0.15);
+  border-radius: 100px;
+  padding: 0.3rem 0.7rem;
+  transition: all 0.3s ease;
+}
+
+.research-card:hover .research-tag {
+  background: rgba(107, 158, 130, 0.12);
+  border-color: rgba(107, 158, 130, 0.25);
+}
+
+/* Bottom accent line */
+.card-line {
+  position: absolute;
+  bottom: 0;
+  left: 2rem;
+  right: 2rem;
+  height: 1px;
+  background: linear-gradient(to right,
+      transparent,
+      rgba(107, 158, 130, 0.25),
+      transparent);
+  transform: scaleX(0);
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.research-card:hover .card-line {
+  transform: scaleX(1);
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 
@@ -524,6 +737,10 @@ button {
 
   .hero-molecule-wrapper {
     display: none;
+  }
+
+  .research-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
@@ -544,5 +761,17 @@ button {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.8rem;
+  }
+
+  .research-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .research-headline {
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+  }
+
+  .section-transition {
+    height: 6rem;
   }
 }
