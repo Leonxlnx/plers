@@ -1,121 +1,119 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
-import Image from "next/image";
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const imageRef = useRef<HTMLImageElement>(null);
-    const titleRef = useRef<HTMLHeadingElement>(null);
+    const imgRef = useRef<HTMLImageElement>(null);
+    const labelRef = useRef<HTMLDivElement>(null);
+    const headlineRef = useRef<HTMLHeadingElement>(null);
+    const descRef = useRef<HTMLParagraphElement>(null);
+    const ctaRef = useRef<HTMLDivElement>(null);
     const glassRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            const tl = gsap.timeline({
-                defaults: { ease: "power2.out" },
-            });
+            const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
 
-            // 1. Image Zoom (Subtle Scale)
-            gsap.to(imageRef.current, {
-                scale: 1.15,
-                duration: 20,
-                ease: "none",
-                repeat: -1,
-                yoyo: true,
-            });
-
-            // 2. Title Reveals
-            const splittedText = titleRef.current?.querySelectorAll(".char-wrapper");
-            if (splittedText) {
-                tl.to(splittedText, {
-                    y: "0%",
-                    opacity: 1,
-                    duration: 1.2,
-                    stagger: 0.05,
-                    ease: "power3.out",
-                }, "+=0.2");
-            }
-
-            // 3. Glass Card Intro
-            tl.fromTo(
-                glassRef.current,
-                { opacity: 0, x: 40 },
-                { opacity: 1, x: 0, duration: 1.2, ease: "power2.out" },
-                "-=0.8"
+            // Ken Burns zoom on image
+            gsap.fromTo(
+                imgRef.current,
+                { scale: 1.0 },
+                { scale: 1.12, duration: 25, ease: "none", repeat: -1, yoyo: true }
             );
 
+            // Label
+            tl.to(labelRef.current, { opacity: 1, duration: 0.8 });
+
+            // Headline lines
+            const lines = headlineRef.current?.querySelectorAll(".line-inner");
+            if (lines) {
+                tl.to(lines, { y: "0%", duration: 1.0, stagger: 0.08 }, "-=0.4");
+            }
+
+            // Description
+            tl.to(descRef.current, { opacity: 1, y: 0, duration: 0.7 }, "-=0.4");
+
+            // CTA
+            tl.to(ctaRef.current, { opacity: 1, y: 0, duration: 0.6 }, "-=0.3");
+
+            // Glass card
+            tl.to(glassRef.current, { opacity: 1, x: 0, duration: 0.9, ease: "power2.out" }, "-=0.6");
         }, containerRef);
 
         return () => ctx.revert();
     }, []);
 
     return (
-        <section
-            ref={containerRef}
-            className="relative w-full h-screen overflow-hidden bg-black text-white"
-        >
-            {/* BACKGROUND IMAGE - Cinematic Zoom */}
-            <div className="absolute inset-0 z-0 select-none">
-                <Image
-                    ref={imageRef}
-                    src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2600&auto=format&fit=crop" // High-res macro leaf
-                    alt="Abstract Organic Structure"
-                    fill
-                    priority
-                    className="object-cover opacity-80"
-                    sizes="100vw"
+        <section className="hero" ref={containerRef}>
+            {/* BG Image */}
+            <div className="hero-bg">
+                <img
+                    ref={imgRef}
+                    src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2600&auto=format&fit=crop"
+                    alt=""
+                    loading="eager"
                 />
-                {/* Vignette Overlay for focus */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none" />
+                <div className="hero-vignette" />
             </div>
 
-            {/* CONTENT LAYER */}
-            <div className="relative z-10 w-full h-full flex flex-col justify-end pb-24 px-8 md:px-20 lg:px-32">
-
-                {/* BIG TYPOGRAPHY (Bottom Left) */}
-                <div className="max-w-[90vw] md:max-w-4xl">
-                    <div className="flex items-center gap-4 mb-6 opacity-60">
-                        <span className="w-12 h-[1px] bg-white"></span>
-                        <span className="uppercase tracking-[0.3em] text-xs font-sans">Est. 2019 • Zürich</span>
-                    </div>
-
-                    <h1 ref={titleRef} className="font-display text-6xl md:text-8xl lg:text-9xl leading-[0.9] tracking-tight">
-                        <span className="block overflow-hidden">
-                            <span className="char-wrapper block translate-y-full opacity-0">Engineering</span>
-                        </span>
-                        <span className="block overflow-hidden ml-12 md:ml-24 italic text-[#C8FF00]"> {/* Acid Lime Accent */}
-                            <span className="char-wrapper block translate-y-full opacity-0">Nature&apos;s</span>
-                        </span>
-                        <span className="block overflow-hidden">
-                            <span className="char-wrapper block translate-y-full opacity-0">Code.</span>
-                        </span>
-                    </h1>
+            {/* Main Content — bottom left */}
+            <div className="hero-content">
+                <div className="hero-label" ref={labelRef}>
+                    <div className="hero-label-line" />
+                    <span>Biosciences · Zürich</span>
                 </div>
 
-                {/* GLASS CARD (Floating Top Right - Asymmetric Balance) */}
-                <div
-                    ref={glassRef}
-                    className="absolute top-32 right-8 md:right-20 lg:right-32 w-72 glass-panel p-8 opacity-0 hidden md:block"
-                >
-                    <div className="text-xs uppercase tracking-widest text-white/50 mb-4">Current Synthesis</div>
-                    <div className="font-display text-2xl mb-2 leading-none">Bio-Algorithmic<br />Growth</div>
-                    <p className="text-sm text-white/70 font-sans leading-relaxed mt-4">
-                        We use generative models to predict protein folding 10,000x faster than traditional simulation.
-                    </p>
-                    <div className="mt-6 flex items-center gap-2 text-xs font-mono text-[#C8FF00]">
-                        <span>●</span> <span>Sytem Active</span>
-                    </div>
-                </div>
+                <h1 className="hero-headline" ref={headlineRef}>
+                    <span className="line">
+                        <span className="line-inner">Engineering</span>
+                    </span>
+                    <span className="line">
+                        <span className="line-inner accent">Nature&apos;s</span>
+                    </span>
+                    <span className="line">
+                        <span className="line-inner">Code.</span>
+                    </span>
+                </h1>
 
-                {/* CTA (Minimal, integrated) */}
-                <div className="absolute bottom-10 right-8 md:right-20 lg:right-32 flex items-center gap-6">
-                    <button className="text-sm font-medium hover:text-[#C8FF00] transition-colors uppercase tracking-widest">
-                        Explore Work
+                <p className="hero-desc" ref={descRef} style={{ transform: "translateY(12px)" }}>
+                    We combine computational biology with generative AI
+                    to decode — and redesign — the building blocks of life.
+                </p>
+
+                <div className="hero-cta" ref={ctaRef} style={{ transform: "translateY(10px)" }}>
+                    <button className="btn-primary">
+                        Explore research
+                        <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                            <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
                     </button>
-                    <div className="w-16 h-[1px] bg-white/20"></div>
+                    <button className="btn-ghost">Learn more</button>
                 </div>
+            </div>
 
+            {/* Glass Card — top right */}
+            <div
+                className="glass-card"
+                ref={glassRef}
+                style={{
+                    position: "absolute",
+                    top: "clamp(7rem, 14vh, 10rem)",
+                    right: "clamp(2rem, 5vw, 8rem)",
+                    width: "280px",
+                    transform: "translateX(30px)",
+                }}
+            >
+                <div className="glass-card-label">Current Focus</div>
+                <div className="glass-card-title">Bio-Algorithmic Growth</div>
+                <p className="glass-card-body">
+                    Generative models that predict protein folding 10,000× faster than traditional simulation.
+                </p>
+                <div className="glass-card-status">
+                    <span className="dot" />
+                    System Active
+                </div>
             </div>
         </section>
     );
