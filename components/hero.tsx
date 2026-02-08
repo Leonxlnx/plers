@@ -67,7 +67,7 @@ export function Hero() {
             <div className="hero-bg">
                 <img
                     ref={imgRef}
-                    src="https://images.unsplash.com/photo-1530587191325-3db32d826c18?q=80&w=3840&auto=format&fit=crop"
+                    src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2600&auto=format&fit=crop"
                     alt=""
                     loading="eager"
                 />
