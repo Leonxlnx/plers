@@ -18,15 +18,16 @@ export function Hero() {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({ defaults: { ease: "power3.out" }, delay: 0.3 });
 
-            // Ken Burns
+            // Ken Burns — cinematic slow pan + zoom + color shift
             gsap.fromTo(
                 imgRef.current,
-                { scale: 1.0, x: "0%", filter: "brightness(0.65)" },
+                { scale: 1.05, x: "0%", y: "0%", filter: "brightness(0.55) saturate(0.8)" },
                 {
-                    scale: 1.25,
-                    x: "-3%",
-                    filter: "brightness(0.8)",
-                    duration: 22,
+                    scale: 1.35,
+                    x: "-5%",
+                    y: "-2%",
+                    filter: "brightness(0.7) saturate(1.1)",
+                    duration: 30,
                     ease: "none",
                     repeat: -1,
                     yoyo: true,
@@ -66,11 +67,12 @@ export function Hero() {
             <div className="hero-bg">
                 <img
                     ref={imgRef}
-                    src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2600&auto=format&fit=crop"
+                    src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?q=80&w=3840&auto=format&fit=crop"
                     alt=""
                     loading="eager"
                 />
                 <div className="hero-vignette" />
+                <div className="hero-particles" />
             </div>
 
             {/* Layout Grid */}
