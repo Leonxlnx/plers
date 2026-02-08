@@ -291,20 +291,22 @@ button {
   position: relative;
   vertical-align: top;
   overflow: hidden;
-  min-width: 3ch;
+  height: 1.1em;
+  min-width: 4ch;
 }
 
 .word-current,
 .word-next {
-  display: block;
+  display: inline-block;
   will-change: transform, opacity;
+  white-space: nowrap;
 }
 
 .word-next {
   position: absolute;
   top: 0;
   left: 0;
-  transform: translateY(110%);
+  transform: translateY(120%);
   opacity: 0;
 }
 
