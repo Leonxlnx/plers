@@ -33,11 +33,8 @@ export function Hero() {
                 }
             );
 
-            // Nav card
-            tl.to(".nav-card", { opacity: 1, y: 0, duration: 0.6 });
-
             // Label
-            tl.to(labelRef.current, { opacity: 1, duration: 0.7 }, "-=0.3");
+            tl.to(labelRef.current, { opacity: 1, duration: 0.7 });
 
             // Headline
             const lines = headlineRef.current?.querySelectorAll(".line-inner");

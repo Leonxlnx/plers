@@ -1,8 +1,23 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+
 export function Navbar() {
+    const navRef = useRef<HTMLElement>(null);
+
+    useEffect(() => {
+        gsap.to(navRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            delay: 0.4,
+            ease: "power3.out",
+        });
+    }, []);
+
     return (
-        <nav className="nav-card" style={{ opacity: 0, transform: "translateY(-6px)" }}>
+        <nav className="nav-card" ref={navRef}>
             <a href="/" className="nav-brand">
                 PLERS<span className="dot">.</span>
             </a>
@@ -13,11 +28,6 @@ export function Navbar() {
                 <a href="#research" className="nav-link">Research</a>
                 <a href="#pipeline" className="nav-link">Pipeline</a>
                 <a href="#about" className="nav-link">About</a>
-            </div>
-
-            <div className="nav-status">
-                <div className="status-dot" />
-                <span className="status-text">Lab Active</span>
             </div>
 
             <button className="nav-cta-btn">
