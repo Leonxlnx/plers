@@ -115,17 +115,17 @@ export function Hero() {
                 </div>
 
                 {/* RIGHT — Bento Grid */}
-                <div className="hero-bento-wrapper">
+                <div
+                    className="hero-bento-wrapper"
+                    ref={bentoRef}
+                    style={{ transform: "translateX(20px)" }}
+                >
                     {/* Scientific annotation */}
                     <div className="bento-fig-label" ref={figRef}>
                         <em>Fig. 1</em> — Active research overview
                     </div>
 
-                    <div
-                        className="hero-bento"
-                        ref={bentoRef}
-                        style={{ transform: "translateX(20px)" }}
-                    >
+                    <div className="hero-bento">
                         {/* Cell 1: Protein research */}
                         <div className="bento-cell bento-img">
                             <img
