@@ -1,28 +1,29 @@
 @import "tailwindcss";
 
 /* ========================================
-   PLERS — "The Specimen Slide"
-   Art-directed Biotech editorial design
+   PLERS — "Scientific Elegance"
+   Warm light-mode editorial biotech
    ======================================== */
 
 @theme {
-  --color-void: #050508;
-  --color-void-light: #0a0a10;
-  --color-surface: #111118;
+  --color-bg: #FAF9F5;
+  --color-bg-warm: #F3F1EB;
+  --color-surface: #ECEAE3;
 
-  --color-bio: #00ff88;
-  --color-bio-dim: #00cc6a;
-  --color-bio-glow: #00ff8830;
-  --color-bio-ultra-dim: #00ff880a;
+  --color-ink: #1A1A1E;
+  --color-ink-soft: #52525A;
+  --color-ink-muted: #9E9EA8;
+  --color-ink-ghost: #CCCCD0;
 
-  --color-cyan: #00e5ff;
-  --color-cyan-glow: #00e5ff20;
+  --color-teal: #0D7C66;
+  --color-teal-deep: #065F50;
+  --color-teal-glow: rgba(13, 124, 102, 0.10);
+  --color-teal-whisper: rgba(13, 124, 102, 0.04);
 
-  --color-rose: #ff2d55;
+  --color-gold: #B8860B;
+  --color-gold-soft: rgba(184, 134, 11, 0.12);
 
-  --color-text: #dcdce5;
-  --color-text-muted: #6e6e82;
-  --color-text-dim: #33334a;
+  --color-rose: #D6336C;
 
   --font-display: "Syne", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
@@ -38,18 +39,18 @@
 }
 
 ::selection {
-  background: rgba(0, 255, 136, 0.18);
-  color: var(--color-bio);
+  background: var(--color-teal-glow);
+  color: var(--color-teal-deep);
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 body {
   font-family: var(--font-body);
-  background: var(--color-void);
-  color: var(--color-text);
+  background: var(--color-bg);
+  color: var(--color-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
@@ -60,14 +61,14 @@ a {
   text-decoration: none;
 }
 
-/* ===== GRAIN OVERLAY ===== */
+/* ===== GRAIN (very subtle on light) ===== */
 
 .grain {
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.018;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 200px 200px;
@@ -85,7 +86,6 @@ a {
   align-items: center;
   justify-content: space-between;
   padding: 2rem 3rem;
-  mix-blend-mode: difference;
 }
 
 .nav-logo {
@@ -94,7 +94,7 @@ a {
   font-weight: 800;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #fff;
+  color: var(--color-ink);
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -104,8 +104,8 @@ a {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--color-bio);
-  box-shadow: 0 0 10px var(--color-bio), 0 0 25px var(--color-bio-glow);
+  background: var(--color-teal);
+  box-shadow: 0 0 8px var(--color-teal-glow);
   animation: breathe 3s ease-in-out infinite;
 }
 
@@ -118,8 +118,8 @@ a {
   }
 
   50% {
-    opacity: 0.5;
-    transform: scale(0.8);
+    opacity: 0.4;
+    transform: scale(0.7);
   }
 }
 
@@ -132,18 +132,17 @@ a {
 
 .nav-link {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
-  font-weight: 400;
+  font-size: 0.6rem;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #fff;
-  opacity: 0.5;
+  color: var(--color-ink-muted);
   cursor: pointer;
-  transition: opacity 0.4s ease;
+  transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-  opacity: 1;
+  color: var(--color-ink);
 }
 
 /* ===== HERO ===== */
@@ -157,37 +156,36 @@ a {
   align-items: center;
 }
 
-/* Background ambient gradients */
+/* Soft ambient tones */
 .hero-ambient {
   position: absolute;
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 75% 40%, rgba(0, 255, 136, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 50% at 20% 70%, rgba(0, 229, 255, 0.025) 0%, transparent 50%),
-    radial-gradient(ellipse 30% 30% at 50% 10%, rgba(255, 45, 85, 0.015) 0%, transparent 50%);
+    radial-gradient(ellipse 55% 45% at 72% 35%, rgba(13, 124, 102, 0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 45% at 15% 70%, rgba(184, 134, 11, 0.04) 0%, transparent 45%),
+    radial-gradient(ellipse 35% 30% at 50% 5%, rgba(214, 51, 108, 0.02) 0%, transparent 40%);
 }
 
-/* Subtle dot grid */
+/* Dot grid */
 .hero-dots {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse 60% 50% at 60% 50%, black 10%, transparent 70%);
+  background-image: radial-gradient(circle, rgba(0, 0, 0, 0.035) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(ellipse 55% 50% at 65% 45%, black 10%, transparent 70%);
 }
 
-/* Scanning line */
+/* Scanning line — warm teal tint */
 .hero-scanline {
   position: absolute;
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(0, 255, 136, 0.12) 30%, rgba(0, 255, 136, 0.12) 70%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(13, 124, 102, 0.08) 30%, rgba(13, 124, 102, 0.08) 70%, transparent 100%);
   z-index: 1;
-  animation: scanline 10s linear infinite;
-  opacity: 0.6;
+  animation: scanline 12s linear infinite;
 }
 
 @keyframes scanline {
@@ -200,31 +198,29 @@ a {
   }
 }
 
-/* Traveling pulse line (horizontal) */
+/* Pulse line */
 .hero-pulse-line {
   position: absolute;
   left: 0;
   right: 0;
   top: 62%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(0, 0, 0, 0.025);
   z-index: 1;
 }
 
 .hero-pulse-line::after {
   content: '';
   position: absolute;
-  width: 120px;
+  width: 100px;
   height: 1px;
-  top: 0;
-  background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.35), transparent);
-  animation: travel 5s linear infinite;
-  box-shadow: 0 0 12px rgba(0, 255, 136, 0.15);
+  background: linear-gradient(90deg, transparent, rgba(13, 124, 102, 0.25), transparent);
+  animation: travel 6s linear infinite;
 }
 
 @keyframes travel {
   0% {
-    left: -120px;
+    left: -100px;
   }
 
   100% {
@@ -240,24 +236,25 @@ a {
   width: 100%;
   height: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.1fr 0.9fr;
   align-items: center;
   padding: 0 3rem;
+  gap: 2rem;
 }
 
-/* ===== HERO TEXT ===== */
+/* ===== TEXT COLUMN ===== */
 
 .hero-text {
-  max-width: 700px;
+  max-width: 680px;
   padding-left: 1rem;
 }
 
 .hero-label {
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--color-text-dim);
+  color: var(--color-ink-muted);
   margin-bottom: 2.5rem;
   display: flex;
   align-items: center;
@@ -268,22 +265,21 @@ a {
   content: '';
   width: 30px;
   height: 1px;
-  background: var(--color-bio-dim);
-  box-shadow: 0 0 6px var(--color-bio-glow);
+  background: var(--color-teal);
 }
 
-/* ===== HEADLINE TYPOGRAPHY — THE STAR ===== */
+/* ===== HEADLINE ===== */
 
 .hero-headline {
   font-family: var(--font-display);
-  line-height: 0.95;
+  line-height: 0.92;
   margin-bottom: 2.5rem;
 }
 
 .hero-headline .line {
   display: block;
   overflow: hidden;
-  padding-bottom: 0.1em;
+  padding-bottom: 0.12em;
 }
 
 .hero-headline .line-inner {
@@ -291,32 +287,31 @@ a {
   transform: translateY(120%);
 }
 
-/* Line 1: "Engineering" — huge, outlined, ghostly */
+/* "Engineering" — outlined, architectural */
 .headline-outline {
-  font-size: clamp(3.5rem, 8vw, 7.5rem);
+  font-size: clamp(3.2rem, 7.5vw, 7rem);
   font-weight: 800;
   letter-spacing: -0.03em;
   color: transparent;
-  -webkit-text-stroke: 1.2px rgba(255, 255, 255, 0.12);
-  position: relative;
+  -webkit-text-stroke: 1.5px var(--color-ink-ghost);
 }
 
-/* Line 2: "tomorrow's" — medium, light weight, offset */
+/* "tomorrow's" — light, italic, indented */
 .headline-light {
-  font-size: clamp(2.8rem, 6.5vw, 6rem);
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
   font-weight: 400;
   letter-spacing: -0.02em;
-  color: var(--color-text-muted);
+  color: var(--color-ink-muted);
   padding-left: 5vw;
   font-style: italic;
 }
 
-/* Line 3: "health." — massive, filled, gradient, THE statement */
+/* "health." — massive, gradient, THE statement */
 .headline-accent {
-  font-size: clamp(4rem, 9.5vw, 9rem);
+  font-size: clamp(3.8rem, 9vw, 8.5rem);
   font-weight: 800;
   letter-spacing: -0.04em;
-  background: linear-gradient(135deg, var(--color-bio) 0%, var(--color-cyan) 60%, #fff 100%);
+  background: linear-gradient(135deg, var(--color-teal-deep) 0%, var(--color-teal) 50%, var(--color-gold) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -335,22 +330,22 @@ a {
   }
 
   50% {
-    opacity: 0.4;
+    opacity: 0.35;
   }
 }
 
-/* ===== HERO BODY ===== */
+/* ===== BODY TEXT ===== */
 
 .hero-body {
   font-size: 0.95rem;
-  font-weight: 300;
+  font-weight: 350;
   line-height: 1.85;
-  color: var(--color-text-muted);
-  max-width: 420px;
+  color: var(--color-ink-soft);
+  max-width: 400px;
   margin-bottom: 2.5rem;
 }
 
-/* ===== HERO CTA ===== */
+/* ===== CTA ===== */
 
 .hero-cta {
   display: flex;
@@ -362,16 +357,16 @@ a {
   font-family: var(--font-body);
   font-size: 0.8rem;
   font-weight: 500;
-  letter-spacing: 0.06em;
-  color: var(--color-void);
-  background: var(--color-bio);
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: var(--color-teal);
   border: none;
-  padding: 0.9rem 2rem;
+  padding: 0.85rem 2rem;
   border-radius: 100px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
@@ -382,14 +377,14 @@ a {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(135deg, var(--color-bio), var(--color-cyan));
+  background: linear-gradient(135deg, var(--color-teal-deep), var(--color-teal));
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 
 .cta-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 50px rgba(0, 255, 136, 0.2), 0 15px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 30px rgba(13, 124, 102, 0.2), 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .cta-primary:hover::before {
@@ -412,16 +407,16 @@ a {
 
 .cta-secondary {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-text-dim);
+  color: var(--color-ink-muted);
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
   border: none;
   background: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
   transition: color 0.3s ease;
   position: relative;
   padding: 0.5rem 0;
@@ -434,19 +429,19 @@ a {
   left: 0;
   width: 0;
   height: 1px;
-  background: var(--color-text-muted);
+  background: var(--color-ink-soft);
   transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cta-secondary:hover {
-  color: var(--color-text);
+  color: var(--color-ink);
 }
 
 .cta-secondary:hover::after {
   width: 100%;
 }
 
-/* ===== HERO VISUAL — Right Side ===== */
+/* ===== VISUAL COLUMN ===== */
 
 .hero-visual {
   position: relative;
@@ -456,46 +451,46 @@ a {
   height: 100%;
 }
 
-/* Morphing blob */
+/* Morphing blob — warm, organic */
 .blob-container {
   position: relative;
-  width: clamp(300px, 32vw, 520px);
-  height: clamp(300px, 32vw, 520px);
+  width: clamp(280px, 30vw, 480px);
+  height: clamp(280px, 30vw, 480px);
 }
 
 .morphing-blob {
   width: 100%;
   height: 100%;
-  background: radial-gradient(ellipse at 30% 30%,
-      rgba(0, 255, 136, 0.12) 0%,
-      rgba(0, 229, 255, 0.06) 40%,
-      rgba(0, 255, 136, 0.02) 70%,
+  background: radial-gradient(ellipse at 35% 35%,
+      rgba(13, 124, 102, 0.12) 0%,
+      rgba(184, 134, 11, 0.06) 40%,
+      rgba(13, 124, 102, 0.03) 70%,
       transparent 100%);
-  border: 1px solid rgba(0, 255, 136, 0.08);
+  border: 1px solid rgba(13, 124, 102, 0.1);
   border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
   animation: morph 15s ease-in-out infinite;
   position: relative;
   box-shadow:
-    0 0 80px rgba(0, 255, 136, 0.06),
-    0 0 160px rgba(0, 255, 136, 0.03),
-    inset 0 0 60px rgba(0, 255, 136, 0.03);
+    0 20px 60px rgba(13, 124, 102, 0.06),
+    0 4px 20px rgba(0, 0, 0, 0.03),
+    inset 0 0 40px rgba(13, 124, 102, 0.03);
 }
 
 .morphing-blob::before {
   content: '';
   position: absolute;
-  inset: 25px;
+  inset: 20px;
   border-radius: inherit;
-  border: 1px solid rgba(0, 255, 136, 0.04);
+  border: 1px solid rgba(13, 124, 102, 0.06);
   animation: morph 15s ease-in-out infinite reverse;
 }
 
 .morphing-blob::after {
   content: '';
   position: absolute;
-  inset: 55px;
+  inset: 48px;
   border-radius: inherit;
-  border: 1px dashed rgba(0, 229, 255, 0.04);
+  border: 1px dashed rgba(184, 134, 11, 0.06);
   animation: morph 20s ease-in-out infinite;
 }
 
@@ -519,19 +514,17 @@ a {
   }
 }
 
-/* Inner blob content - cell nucleus effect */
+/* Nucleus */
 .blob-nucleus {
   position: absolute;
-  width: 35%;
-  height: 35%;
-  top: 28%;
-  left: 30%;
-  background: radial-gradient(circle,
-      rgba(0, 255, 136, 0.1) 0%,
-      transparent 70%);
+  width: 30%;
+  height: 30%;
+  top: 30%;
+  left: 32%;
+  background: radial-gradient(circle, rgba(13, 124, 102, 0.08) 0%, transparent 70%);
   border-radius: 50%;
   animation: float-nucleus 8s ease-in-out infinite;
-  border: 1px solid rgba(0, 255, 136, 0.05);
+  border: 1px solid rgba(13, 124, 102, 0.05);
 }
 
 @keyframes float-nucleus {
@@ -542,11 +535,11 @@ a {
   }
 
   33% {
-    transform: translate(8px, -12px) scale(1.05);
+    transform: translate(6px, -10px) scale(1.04);
   }
 
   66% {
-    transform: translate(-5px, 8px) scale(0.95);
+    transform: translate(-4px, 6px) scale(0.96);
   }
 }
 
@@ -554,10 +547,10 @@ a {
 
 .rotating-badge {
   position: absolute;
-  top: 18%;
-  right: -5%;
-  width: 140px;
-  height: 140px;
+  top: 16%;
+  right: -3%;
+  width: 130px;
+  height: 130px;
 }
 
 .rotating-badge svg {
@@ -569,7 +562,7 @@ a {
 .rotating-badge text {
   font-family: var(--font-mono);
   font-size: 10.5px;
-  fill: var(--color-text-dim);
+  fill: var(--color-ink-ghost);
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -579,11 +572,10 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
-  background: var(--color-bio);
-  box-shadow: 0 0 8px var(--color-bio-glow);
+  background: var(--color-teal);
 }
 
 @keyframes spin {
@@ -598,11 +590,10 @@ a {
   position: absolute;
   z-index: 3;
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: 0.5rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--color-text-dim);
-  opacity: 0.5;
+  color: var(--color-ink-ghost);
 }
 
 .lab-annotation.top-right {
@@ -623,7 +614,8 @@ a {
 }
 
 .lab-annotation .label-key {
-  color: rgba(0, 255, 136, 0.25);
+  color: var(--color-teal);
+  opacity: 0.5;
 }
 
 /* ===== DNA TICKER ===== */
@@ -643,9 +635,9 @@ a {
   white-space: nowrap;
   animation: ticker 80s linear infinite;
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: 0.52rem;
   letter-spacing: 0.4em;
-  color: rgba(0, 255, 136, 0.05);
+  color: rgba(0, 0, 0, 0.04);
 }
 
 @keyframes ticker {
@@ -658,31 +650,30 @@ a {
   }
 }
 
-/* ===== DATA STREAM (vertical, right edge) ===== */
+/* ===== DATA STREAM ===== */
 
 .data-stream {
   position: absolute;
-  right: 1.2rem;
+  right: 1rem;
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.35rem;
+  gap: 0.3rem;
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: 0.48rem;
   letter-spacing: 0.1em;
-  color: rgba(0, 255, 136, 0.08);
+  color: rgba(0, 0, 0, 0.06);
   line-height: 1;
 }
 
 .data-stream span.active {
-  color: rgba(0, 255, 136, 0.2);
-  text-shadow: 0 0 4px rgba(0, 255, 136, 0.1);
+  color: rgba(13, 124, 102, 0.2);
 }
 
-/* ===== SCROLL INDICATOR ===== */
+/* ===== SCROLL ===== */
 
 .scroll-hint {
   position: absolute;
@@ -698,16 +689,16 @@ a {
 
 .scroll-hint span {
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: 0.5rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: var(--color-text-dim);
+  color: var(--color-ink-ghost);
 }
 
 .scroll-line {
   width: 1px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.05);
+  height: 36px;
+  background: rgba(0, 0, 0, 0.06);
   position: relative;
   overflow: hidden;
 }
@@ -718,9 +709,8 @@ a {
   top: -100%;
   width: 100%;
   height: 50%;
-  background: var(--color-bio);
+  background: var(--color-teal);
   animation: scroll-pulse 2.5s ease-in-out infinite;
-  box-shadow: 0 0 6px var(--color-bio-glow);
 }
 
 @keyframes scroll-pulse {
@@ -733,14 +723,14 @@ a {
   }
 }
 
-/* ===== PARTICLE CANVAS ===== */
+/* ===== PARTICLES ===== */
 
 .particle-canvas {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.5;
+  opacity: 0.35;
 }
 
 /* ===== RESPONSIVE ===== */
@@ -760,13 +750,10 @@ a {
     right: -10%;
     top: 50%;
     transform: translateY(-50%);
-    opacity: 0.3;
+    opacity: 0.2;
   }
 
-  .rotating-badge {
-    display: none;
-  }
-
+  .rotating-badge,
   .data-stream {
     display: none;
   }
@@ -801,5 +788,9 @@ a {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
+  }
+
+  .scroll-hint {
+    display: none;
   }
 }

@@ -10,7 +10,6 @@ interface Particle {
     radius: number;
     opacity: number;
     opacityDir: number;
-    hue: number;
 }
 
 export function ParticleField() {
@@ -18,8 +17,8 @@ export function ParticleField() {
     const particlesRef = useRef<Particle[]>([]);
     const animRef = useRef<number>(0);
 
-    const COUNT = 35;
-    const CONNECT_DIST = 160;
+    const COUNT = 30;
+    const CONNECT_DIST = 140;
 
     const init = useCallback((w: number, h: number) => {
         const particles: Particle[] = [];
@@ -27,12 +26,11 @@ export function ParticleField() {
             particles.push({
                 x: Math.random() * w,
                 y: Math.random() * h,
-                vx: (Math.random() - 0.5) * 0.15,
-                vy: (Math.random() - 0.5) * 0.15,
-                radius: Math.random() * 1.5 + 0.3,
-                opacity: Math.random() * 0.3 + 0.05,
-                opacityDir: (Math.random() - 0.5) * 0.003,
-                hue: Math.random() > 0.75 ? 174 : 152,
+                vx: (Math.random() - 0.5) * 0.12,
+                vy: (Math.random() - 0.5) * 0.12,
+                radius: Math.random() * 1.2 + 0.3,
+                opacity: Math.random() * 0.15 + 0.03,
+                opacityDir: (Math.random() - 0.5) * 0.002,
             });
         }
         particlesRef.current = particles;
@@ -73,33 +71,27 @@ export function ParticleField() {
                 if (p.y > h + 5) p.y = -5;
 
                 p.opacity += p.opacityDir;
-                if (p.opacity < 0.03 || p.opacity > 0.35) p.opacityDir *= -1;
+                if (p.opacity < 0.02 || p.opacity > 0.18) p.opacityDir *= -1;
 
-                // Particle
+                // Dark particles for light mode (teal tint)
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${p.hue}, 100%, 65%, ${p.opacity})`;
-                ctx.fill();
-
-                // Glow
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${p.hue}, 100%, 65%, ${p.opacity * 0.06})`;
+                ctx.fillStyle = `rgba(13, 124, 102, ${p.opacity})`;
                 ctx.fill();
             }
 
-            // Connections
+            // Connections — subtle dark lines
             for (let i = 0; i < ps.length; i++) {
                 for (let j = i + 1; j < ps.length; j++) {
                     const dx = ps[i].x - ps[j].x;
                     const dy = ps[i].y - ps[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
                     if (dist < CONNECT_DIST) {
-                        const alpha = (1 - dist / CONNECT_DIST) * 0.06;
+                        const alpha = (1 - dist / CONNECT_DIST) * 0.04;
                         ctx.beginPath();
                         ctx.moveTo(ps[i].x, ps[i].y);
                         ctx.lineTo(ps[j].x, ps[j].y);
-                        ctx.strokeStyle = `hsla(152, 100%, 65%, ${alpha})`;
+                        ctx.strokeStyle = `rgba(13, 124, 102, ${alpha})`;
                         ctx.lineWidth = 0.4;
                         ctx.stroke();
                     }

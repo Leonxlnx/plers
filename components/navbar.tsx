@@ -8,7 +8,7 @@ export function Navbar() {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const timer = setTimeout(() => setVisible(true), 400);
+        const timer = setTimeout(() => setVisible(true), 300);
         return () => clearTimeout(timer);
     }, []);
 
@@ -17,8 +17,8 @@ export function Navbar() {
             className="nav"
             style={{
                 opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(-10px)",
-                transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+                transform: visible ? "translateY(0)" : "translateY(-8px)",
+                transition: "all 0.9s cubic-bezier(0.16, 1, 0.3, 1)",
             }}
         >
             <a href="/" className="nav-logo">
