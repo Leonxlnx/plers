@@ -3,33 +3,37 @@
 import { useEffect, useState } from "react";
 
 export function Navbar() {
-    const [visible, setVisible] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
-        setTimeout(() => setVisible(true), 200);
+        const handleScroll = () => {
+            setScrolled(window.scrollY > 20);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     return (
-        <nav
-            className="nav"
-            style={{
-                opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(-6px)",
-                transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
-            }}
-        >
-            <a href="/" className="nav-logo">
-                <span className="nav-dot" />
-                plers
+        <nav className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-6 md:px-20 transition-all duration-500`}>
+            {/* Brand (Minimal) */}
+            <a href="/" className="font-display text-xl uppercase tracking-widest text-white/90 hover:text-[#C8FF00] transition-colors">
+                PLERS<span className="text-[#C8FF00]">.</span> {/* Acid Lime Period */}
             </a>
 
-            <ul className="nav-links">
-                {["Research", "Platform", "About", "Contact"].map((item) => (
-                    <li key={item}>
-                        <a href={`#${item.toLowerCase()}`} className="nav-link">{item}</a>
-                    </li>
-                ))}
+            {/* Nav Links (Right Side) */}
+            <ul className="hidden md:flex items-center gap-12 font-sans text-xs uppercase tracking-[0.2em] text-white/70">
+                <li><a href="#lab" className="hover:text-[#C8FF00] transition-colors">Lab</a></li>
+                <li><a href="#ethics" className="hover:text-[#C8FF00] transition-colors">Ethics</a></li>
+                <li><a href="#journal" className="hover:text-[#C8FF00] transition-colors">Journal</a></li>
+                <li>
+                    <button className="px-6 py-2 border border-white/20 rounded-full hover:bg-[#C8FF00] hover:text-black hover:border-transparent transition-all duration-300">
+                        Contact
+                    </button>
+                </li>
             </ul>
+
+            {/* Mobile Menu Icon */}
+            <div className="md:hidden text-white">● ● ●</div>
         </nav>
     );
 }

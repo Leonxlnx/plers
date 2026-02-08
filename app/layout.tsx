@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, DM_Serif_Display } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import { LenisProvider } from "@/components/lenis-provider";
 import "./globals.css";
 
@@ -9,18 +9,18 @@ const inter = Inter({
   display: "swap",
 });
 
-const dmSerif = DM_Serif_Display({
-  variable: "--font-serif",
+const playfair = Playfair_Display({
+  variable: "--font-display",
   subsets: ["latin"],
   display: "swap",
-  weight: "400",
+  weight: ["400", "500", "600"],
   style: ["normal", "italic"],
 });
 
 export const metadata: Metadata = {
-  title: "Plers BioSciences — Engineering Tomorrow's Health",
+  title: "Plers BioSciences — The Future of Life",
   description:
-    "Plers merges biotechnology with artificial intelligence to develop personalized therapies with the potential to transform millions of lives.",
+    "We engineer nature to protect it. Plers combines biotechnology with computational design.",
 };
 
 export default function RootLayout({
@@ -29,7 +29,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${dmSerif.variable}`}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body>
         <LenisProvider>
           {children}
