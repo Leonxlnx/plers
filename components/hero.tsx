@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { Specimen } from "./specimen";
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -10,8 +11,7 @@ export function Hero() {
     const headlineRef = useRef<HTMLHeadingElement>(null);
     const descRef = useRef<HTMLParagraphElement>(null);
     const ctaRef = useRef<HTMLDivElement>(null);
-    const bentoRef = useRef<HTMLDivElement>(null);
-    const figRef = useRef<HTMLDivElement>(null);
+    const specimenRef = useRef<HTMLDivElement>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -51,11 +51,13 @@ export function Hero() {
             // CTA
             tl.to(ctaRef.current, { opacity: 1, y: 0, duration: 0.5 }, "-=0.3");
 
-            // Fig label
-            tl.to(figRef.current, { opacity: 1, duration: 0.4 }, "-=0.5");
-
-            // Bento
-            tl.to(bentoRef.current, { opacity: 1, x: 0, duration: 1.0, ease: "power2.out" }, "-=0.7");
+            // Specimen — scale up + fade in
+            tl.to(specimenRef.current, {
+                opacity: 1,
+                scale: 1,
+                duration: 1.4,
+                ease: "power2.out",
+            }, "-=0.8");
 
             // Scroll indicator
             tl.to(scrollRef.current, { opacity: 1, duration: 0.8 }, "-=0.3");
@@ -114,58 +116,13 @@ export function Hero() {
                     </div>
                 </div>
 
-                {/* RIGHT — Bento Grid */}
+                {/* RIGHT — Specimen Viewer */}
                 <div
-                    className="hero-bento-wrapper"
-                    ref={bentoRef}
-                    style={{ transform: "translateX(20px)" }}
+                    className="hero-specimen-wrapper"
+                    ref={specimenRef}
+                    style={{ opacity: 0, transform: "scale(0.85)" }}
                 >
-                    {/* Scientific annotation */}
-                    <div className="bento-fig-label" ref={figRef}>
-                        <em>Fig. 1</em> — Active research overview
-                    </div>
-
-                    <div className="hero-bento">
-                        {/* Cell 1: Protein research */}
-                        <div className="bento-cell bento-img">
-                            <img
-                                src="https://images.unsplash.com/photo-1530026405186-ed1f139313f8?w=600&auto=format&fit=crop&q=80"
-                                alt="Protein synthesis visualization"
-                                loading="eager"
-                            />
-                            <div className="stripe-overlay" />
-                            <div className="bento-tag">Protein Synthesis</div>
-                        </div>
-
-                        {/* Cell 2: Stat */}
-                        <div className="bento-cell bento-stat">
-                            <span className="stat-number">98.7<span className="stat-unit">%</span></span>
-                            <span className="stat-label">Sequencing Accuracy</span>
-                        </div>
-
-                        {/* Cell 3: Research phase + progress */}
-                        <div className="bento-cell bento-phase">
-                            <div className="phase-badge">Phase III</div>
-                            <div className="phase-text">
-                                <span className="phase-title">mRNA Therapeutics</span>
-                                <span className="phase-sub">Clinical trials · 2024</span>
-                            </div>
-                            <div className="phase-progress">
-                                <div className="phase-progress-bar" />
-                            </div>
-                        </div>
-
-                        {/* Cell 4: Gene mapping */}
-                        <div className="bento-cell bento-img">
-                            <img
-                                src="https://images.unsplash.com/photo-1576086213369-97a306d36557?w=600&auto=format&fit=crop&q=80"
-                                alt="Gene mapping laboratory"
-                                loading="eager"
-                            />
-                            <div className="scanline-overlay" />
-                            <div className="bento-tag">Gene Mapping</div>
-                        </div>
-                    </div>
+                    <Specimen />
                 </div>
             </div>
 

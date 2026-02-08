@@ -352,251 +352,354 @@ button {
 }
 
 /* ============================================
-   RIGHT: BENTO GRID
+   RIGHT: SPECIMEN VIEWER
    ============================================ */
 
-.hero-bento-wrapper {
+.hero-specimen-wrapper {
   align-self: center;
   justify-self: center;
-  opacity: 0;
 }
 
-/* Fig label — scientific annotation */
-.bento-fig-label {
-  font-size: 0.48rem;
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.25);
-  margin-bottom: 0.6rem;
-  opacity: 0;
+.specimen {
+  position: relative;
+  width: clamp(280px, 28vw, 420px);
+  aspect-ratio: 1;
 }
 
-.bento-fig-label em {
-  font-style: normal;
-  color: var(--sage);
+/* Rotating outer ring — dashed */
+.specimen-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed rgba(107, 158, 130, 0.25);
+  border-radius: 50%;
+  animation: ring-rotate 45s linear infinite;
 }
 
-.hero-bento {
-  display: grid;
-  grid-template-columns: 1.3fr 0.7fr;
-  grid-template-rows: 1.1fr 0.9fr;
-  gap: 4px;
-  width: 100%;
-  max-width: 460px;
-  aspect-ratio: 0.88;
-  border-radius: 16px;
+.specimen-ring-inner {
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(107, 158, 130, 0.08);
+  border-radius: 50%;
+  animation: ring-rotate 60s linear infinite reverse;
+}
+
+@keyframes ring-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Crosshair */
+.crosshair-h,
+.crosshair-v {
+  position: absolute;
+  background: rgba(107, 158, 130, 0.08);
+  z-index: 1;
+}
+
+.crosshair-h {
+  top: 50%;
+  left: 20%;
+  right: 20%;
+  height: 1px;
+  transform: translateY(-0.5px);
+}
+
+.crosshair-v {
+  left: 50%;
+  top: 20%;
+  bottom: 20%;
+  width: 1px;
+  transform: translateX(-0.5px);
+}
+
+/* Interior — the dish glass area */
+.dish-interior {
+  position: absolute;
+  inset: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, rgba(107, 158, 130, 0.04) 0%, transparent 60%);
   overflow: hidden;
-  border: 1px solid rgba(107, 158, 130, 0.12);
-  background: rgba(107, 158, 130, 0.04);
-  animation: bento-breathe 5s ease-in-out infinite;
 }
 
-@keyframes bento-breathe {
+/* Floating cells */
+.cell {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.cell-1 {
+  width: 52px;
+  height: 52px;
+  top: 25%;
+  left: 20%;
+  background: radial-gradient(circle at 35% 35%, rgba(107, 158, 130, 0.18), rgba(107, 158, 130, 0.04));
+  border: 1px solid rgba(107, 158, 130, 0.12);
+  animation: cell-float-1 8s ease-in-out infinite;
+}
+
+.cell-2 {
+  width: 36px;
+  height: 36px;
+  top: 55%;
+  left: 60%;
+  background: radial-gradient(circle at 40% 30%, rgba(107, 158, 130, 0.14), rgba(107, 158, 130, 0.02));
+  border: 1px solid rgba(107, 158, 130, 0.08);
+  animation: cell-float-2 10s ease-in-out infinite;
+}
+
+.cell-3 {
+  width: 18px;
+  height: 18px;
+  top: 15%;
+  left: 55%;
+  background: rgba(107, 158, 130, 0.12);
+  animation: cell-float-3 6s ease-in-out infinite;
+}
+
+.cell-4 {
+  width: 28px;
+  height: 28px;
+  top: 65%;
+  left: 28%;
+  background: radial-gradient(circle at 30% 30%, rgba(107, 158, 130, 0.16), transparent);
+  border: 1px solid rgba(107, 158, 130, 0.06);
+  animation: cell-float-1 12s ease-in-out infinite reverse;
+}
+
+.cell-5 {
+  width: 10px;
+  height: 10px;
+  top: 40%;
+  left: 75%;
+  background: rgba(107, 158, 130, 0.15);
+  animation: cell-float-2 7s ease-in-out infinite;
+}
+
+.cell-6 {
+  width: 42px;
+  height: 42px;
+  top: 38%;
+  left: 38%;
+  background: radial-gradient(circle at 45% 40%, rgba(139, 184, 158, 0.1), transparent);
+  border: 1px solid rgba(107, 158, 130, 0.06);
+  animation: cell-float-3 14s ease-in-out infinite;
+}
+
+.cell-7 {
+  width: 14px;
+  height: 14px;
+  top: 78%;
+  left: 52%;
+  background: rgba(107, 158, 130, 0.1);
+  animation: cell-float-1 9s ease-in-out infinite;
+}
+
+.cell-8 {
+  width: 8px;
+  height: 8px;
+  top: 30%;
+  left: 72%;
+  background: rgba(139, 184, 158, 0.2);
+  animation: cell-float-2 5s ease-in-out infinite reverse;
+}
+
+@keyframes cell-float-1 {
 
   0%,
   100% {
-    border-color: rgba(107, 158, 130, 0.12);
+    transform: translate(0, 0);
+  }
+
+  33% {
+    transform: translate(6px, -8px);
+  }
+
+  66% {
+    transform: translate(-4px, 5px);
+  }
+}
+
+@keyframes cell-float-2 {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  40% {
+    transform: translate(-7px, 4px);
+  }
+
+  70% {
+    transform: translate(5px, -6px);
+  }
+}
+
+@keyframes cell-float-3 {
+
+  0%,
+  100% {
+    transform: translate(0, 0);
   }
 
   50% {
-    border-color: rgba(107, 158, 130, 0.22);
+    transform: translate(8px, 8px);
   }
 }
 
-/* Cell base */
-.bento-cell {
-  position: relative;
-  overflow: hidden;
-  background: #0a0a0a;
-}
-
-/* Image cells */
-.bento-img img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: brightness(0.65) contrast(1.1) saturate(0.7);
-  transition: filter 0.5s ease, transform 0.5s ease;
-}
-
-.bento-img:hover img {
-  filter: brightness(0.8) contrast(1.05) saturate(0.85);
-  transform: scale(1.06);
-}
-
-/* Diagonal stripe overlay */
-.stripe-overlay {
+/* Focus ring — inner pulsing circle */
+.focus-ring {
   position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: repeating-linear-gradient(-45deg,
-      transparent,
-      transparent 4px,
-      rgba(107, 158, 130, 0.04) 4px,
-      rgba(107, 158, 130, 0.04) 5px);
+  top: 50%;
+  left: 50%;
+  width: 60px;
+  height: 60px;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(107, 158, 130, 0.12);
+  border-radius: 50%;
+  animation: focus-pulse 3s ease-in-out infinite;
 }
 
-/* Horizontal scanline overlay */
-.scanline-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background: repeating-linear-gradient(0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.15) 2px,
-      rgba(0, 0, 0, 0.15) 3px);
+@keyframes focus-pulse {
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.15);
+    opacity: 0.15;
+  }
 }
 
-/* Tag */
-.bento-tag {
+/* Labels — scientific annotations around the ring */
+.specimen-label {
   position: absolute;
-  top: 8px;
-  left: 8px;
   z-index: 2;
+}
+
+.specimen-label span {
   font-size: 0.42rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.55);
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(6px);
-  padding: 0.2rem 0.45rem;
-  border-radius: 3px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.18);
 }
 
-/* Stat cell */
-.bento-stat {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  text-align: center;
-  background: linear-gradient(145deg, #0f1a14 0%, #0a140f 60%, #0a0f0c 100%);
+.label-top {
+  top: -1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.bento-stat::before {
+.label-bottom {
+  bottom: -1.4rem;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.label-left {
+  left: -0.5rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(-90deg);
+  transform-origin: center;
+}
+
+.label-right {
+  right: -0.2rem;
+  top: 50%;
+  transform: translateY(-50%) rotate(90deg);
+  transform-origin: center;
+}
+
+/* Corner bracket markers */
+.corner-mark {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  z-index: 2;
+}
+
+.corner-mark::before,
+.corner-mark::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background-image: radial-gradient(circle, rgba(107, 158, 130, 0.04) 1px, transparent 1px);
-  background-size: 14px 14px;
-  pointer-events: none;
+  background: rgba(107, 158, 130, 0.2);
 }
 
-.stat-number {
-  font-family: var(--font-display);
-  font-size: 1.8rem;
-  font-weight: 500;
-  line-height: 1;
-  color: #fff;
-}
-
-.stat-unit {
-  font-size: 1rem;
-  color: var(--sage);
-}
-
-.stat-label {
-  font-size: 0.45rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
-  margin-top: 0.35rem;
-}
-
-/* Phase cell */
-.bento-phase {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 1rem;
-  background: linear-gradient(160deg, #0f1a14 0%, #0a130f 60%, #0a0c0a 100%);
-  overflow: hidden;
-  gap: 0.5rem;
-}
-
-.bento-phase::before {
-  content: '';
-  position: absolute;
-  bottom: -15px;
-  right: -15px;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(107, 158, 130, 0.07) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.phase-badge {
-  font-size: 0.5rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #fff;
-  background: var(--sage);
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  line-height: 1.3;
-}
-
-.phase-text {
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-}
-
-.phase-title {
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.phase-sub {
-  font-size: 0.45rem;
-  font-weight: 400;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-/* Progress bar in phase cell */
-.phase-progress {
+.corner-mark::before {
   width: 100%;
-  height: 3px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 2px;
-  margin-top: 0.2rem;
-  overflow: hidden;
+  height: 1px;
 }
 
-.phase-progress-bar {
+.corner-mark::after {
+  width: 1px;
   height: 100%;
-  width: 72%;
-  background: linear-gradient(90deg, var(--sage), var(--sage-light));
-  border-radius: 2px;
-  animation: progress-fill 1.6s ease-out 1.5s both;
 }
 
-@keyframes progress-fill {
-  from {
-    width: 0;
-  }
+.top-left {
+  top: -6px;
+  left: -6px;
+}
 
-  to {
-    width: 72%;
-  }
+.top-left::before {
+  top: 0;
+  left: 0;
+}
+
+.top-left::after {
+  top: 0;
+  left: 0;
+}
+
+.top-right {
+  top: -6px;
+  right: -6px;
+}
+
+.top-right::before {
+  top: 0;
+  right: 0;
+}
+
+.top-right::after {
+  top: 0;
+  right: 0;
+}
+
+.bottom-left {
+  bottom: -6px;
+  left: -6px;
+}
+
+.bottom-left::before {
+  bottom: 0;
+  left: 0;
+}
+
+.bottom-left::after {
+  bottom: 0;
+  left: 0;
+}
+
+.bottom-right {
+  bottom: -6px;
+  right: -6px;
+}
+
+.bottom-right::before {
+  bottom: 0;
+  right: 0;
+}
+
+.bottom-right::after {
+  bottom: 0;
+  right: 0;
 }
 
 /* ============================================
@@ -654,7 +757,7 @@ button {
     grid-template-columns: 1fr;
   }
 
-  .hero-bento-wrapper {
+  .hero-specimen-wrapper {
     display: none;
   }
 }
