@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { Molecule } from "./molecule";
+import { WordRotator } from "./word-rotator";
 
 export function Hero() {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -86,7 +87,7 @@ export function Hero() {
                             <span className="line-inner">Engineering</span>
                         </span>
                         <span className="line">
-                            <span className="line-inner accent">Nature&apos;s</span>
+                            <span className="line-inner accent"><WordRotator /></span>
                         </span>
                         <span className="line">
                             <span className="line-inner">Code.</span>

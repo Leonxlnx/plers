@@ -1,84 +1,259 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import gsap from "gsap";
 
-// Node positions for a stylized molecule (relative to center)
-const NODES = [
-    { x: 0, y: 0, r: 22, primary: true },
-    { x: -80, y: -55, r: 14 },
-    { x: 65, y: -70, r: 16 },
-    { x: 90, y: 25, r: 12 },
-    { x: 40, y: 85, r: 15 },
-    { x: -60, y: 70, r: 13 },
-    { x: -110, y: 10, r: 10 },
-    { x: -30, y: -110, r: 9 },
-    { x: 120, y: -40, r: 8 },
-    { x: 110, y: 80, r: 7 },
-    { x: -100, y: -100, r: 7 },
-    { x: -130, y: 60, r: 6 },
-];
+// ─── Shape definitions (node positions relative to center) ───
+const SHAPES = {
+    // Protein molecule — organic, asymmetric
+    molecule: [
+        { x: 0, y: 0 },
+        { x: -80, y: -55 },
+        { x: 65, y: -70 },
+        { x: 90, y: 25 },
+        { x: 40, y: 85 },
+        { x: -60, y: 70 },
+        { x: -110, y: 10 },
+        { x: -30, y: -110 },
+        { x: 120, y: -40 },
+        { x: 110, y: 80 },
+        { x: -100, y: -100 },
+        { x: -130, y: 60 },
+    ],
+    // DNA double helix — two interleaved spirals
+    helix: [
+        { x: 0, y: -120 },
+        { x: 50, y: -85 },
+        { x: -50, y: -85 },
+        { x: -45, y: -30 },
+        { x: 45, y: -30 },
+        { x: 40, y: 25 },
+        { x: -40, y: 25 },
+        { x: -35, y: 80 },
+        { x: 35, y: 80 },
+        { x: 0, y: 120 },
+        { x: 55, y: -55 },
+        { x: -55, y: 55 },
+    ],
+    // Cell — circular arrangement with nucleus
+    cell: [
+        { x: 0, y: 0 },
+        { x: 0, y: -95 },
+        { x: 82, y: -48 },
+        { x: 82, y: 48 },
+        { x: 0, y: 95 },
+        { x: -82, y: 48 },
+        { x: -82, y: -48 },
+        { x: 30, y: -25 },
+        { x: -30, y: 25 },
+        { x: 25, y: 30 },
+        { x: -25, y: -30 },
+        { x: 0, y: -45 },
+    ],
+    // Crystalline — lattice grid
+    crystal: [
+        { x: -60, y: -90 },
+        { x: 0, y: -90 },
+        { x: 60, y: -90 },
+        { x: -90, y: -30 },
+        { x: -30, y: -30 },
+        { x: 30, y: -30 },
+        { x: 90, y: -30 },
+        { x: -60, y: 30 },
+        { x: 0, y: 30 },
+        { x: 60, y: 30 },
+        { x: -30, y: 90 },
+        { x: 30, y: 90 },
+    ],
+};
 
-// Connections between nodes (indices)
-const BONDS = [
-    [0, 1], [0, 2], [0, 3], [0, 4], [0, 5],
-    [1, 6], [1, 7], [2, 8], [2, 7],
-    [3, 8], [4, 9], [5, 6], [5, 11],
-    [1, 10], [10, 7],
-];
+// Bonds per shape
+const BONDS_MAP = {
+    molecule: [
+        [0, 1], [0, 2], [0, 3], [0, 4], [0, 5],
+        [1, 6], [1, 7], [2, 8], [2, 7],
+        [3, 8], [4, 9], [5, 6], [5, 11],
+        [1, 10], [10, 7],
+    ],
+    helix: [
+        [0, 1], [0, 2], [1, 4], [2, 3],
+        [3, 6], [4, 5], [5, 8], [6, 7],
+        [7, 9], [8, 9], [1, 2], [3, 4],
+        [5, 6], [7, 8], [10, 11],
+    ],
+    cell: [
+        [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 1],
+        [0, 7], [0, 8], [0, 9], [0, 10], [0, 11],
+        [7, 9], [8, 10], [10, 11], [7, 11],
+    ],
+    crystal: [
+        [0, 1], [1, 2], [0, 3], [0, 4],
+        [1, 4], [1, 5], [2, 5], [2, 6],
+        [3, 7], [4, 7], [4, 8], [5, 8],
+        [5, 9], [6, 9], [7, 10], [8, 10],
+    ],
+};
 
+const SHAPE_NAMES = Object.keys(SHAPES) as (keyof typeof SHAPES)[];
+const LABELS: Record<string, string[]> = {
+    molecule: ["Gly", "Glycine", "75.03 g/mol"],
+    helix: ["DNA", "Double Helix", "2nm width"],
+    cell: ["Cell", "Eukaryote", "10-100μm"],
+    crystal: ["NaCl", "Lattice", "5.6Å unit"],
+};
+
+const NODE_COUNT = 12;
+const BOND_COUNT = 15;
 const CX = 160;
 const CY = 160;
+const NODE_RADII = [22, 14, 16, 12, 15, 13, 10, 9, 8, 7, 7, 6];
 
 export function Molecule() {
     const svgRef = useRef<SVGSVGElement>(null);
-    const groupRef = useRef<SVGGElement>(null);
+    const nodesRef = useRef<(SVGCircleElement | null)[]>([]);
+    const highlightsRef = useRef<(SVGCircleElement | null)[]>([]);
+    const bondsRef = useRef<(SVGLineElement | null)[]>([]);
+    const orbitRef = useRef<SVGCircleElement>(null);
+    const shapeIndexRef = useRef(0);
+    const label1Ref = useRef<HTMLSpanElement>(null);
+    const label2Ref = useRef<HTMLSpanElement>(null);
+    const label3Ref = useRef<HTMLSpanElement>(null);
 
-    useEffect(() => {
-        if (!svgRef.current || !groupRef.current) return;
+    const morphTo = useCallback((shapeKey: keyof typeof SHAPES) => {
+        const shape = SHAPES[shapeKey];
+        const bonds = BONDS_MAP[shapeKey];
 
-        // Gentle floating rotation
-        gsap.to(groupRef.current, {
-            rotation: 8,
-            duration: 12,
-            ease: "sine.inOut",
-            repeat: -1,
-            yoyo: true,
-            transformOrigin: `${CX}px ${CY}px`,
+        // Morph nodes
+        shape.forEach((pos, i) => {
+            const node = nodesRef.current[i];
+            const highlight = highlightsRef.current[i];
+            if (node) {
+                gsap.to(node, {
+                    attr: { cx: CX + pos.x, cy: CY + pos.y },
+                    duration: 1.4,
+                    ease: "power2.inOut",
+                    delay: i * 0.03,
+                });
+            }
+            if (highlight) {
+                gsap.to(highlight, {
+                    attr: {
+                        cx: CX + pos.x - NODE_RADII[i] * 0.25,
+                        cy: CY + pos.y - NODE_RADII[i] * 0.25,
+                    },
+                    duration: 1.4,
+                    ease: "power2.inOut",
+                    delay: i * 0.03,
+                });
+            }
         });
 
-        // Node pulse
-        const nodes = svgRef.current.querySelectorAll(".mol-node");
-        nodes.forEach((node, i) => {
-            gsap.to(node, {
-                scale: 1.15,
-                opacity: 0.7,
-                duration: 2 + i * 0.3,
-                ease: "sine.inOut",
-                repeat: -1,
-                yoyo: true,
-                transformOrigin: "center",
-                delay: i * 0.15,
-            });
+        // Morph bonds
+        bonds.forEach(([from, to], i) => {
+            const bond = bondsRef.current[i];
+            if (bond) {
+                gsap.to(bond, {
+                    attr: {
+                        x1: CX + shape[from].x,
+                        y1: CY + shape[from].y,
+                        x2: CX + shape[to].x,
+                        y2: CY + shape[to].y,
+                    },
+                    duration: 1.4,
+                    ease: "power2.inOut",
+                    delay: i * 0.02,
+                });
+            }
         });
 
-        // Bond shimmer
-        const bonds = svgRef.current.querySelectorAll(".mol-bond");
-        bonds.forEach((bond, i) => {
-            gsap.to(bond, {
-                opacity: 0.15,
-                duration: 3 + i * 0.2,
-                ease: "sine.inOut",
-                repeat: -1,
-                yoyo: true,
-                delay: i * 0.1,
-            });
+        // Update labels
+        const labels = LABELS[shapeKey];
+        const tl = gsap.timeline();
+        tl.to([label1Ref.current, label2Ref.current, label3Ref.current], {
+            opacity: 0,
+            y: -5,
+            duration: 0.3,
+            stagger: 0.05,
+            onComplete: () => {
+                if (label1Ref.current) label1Ref.current.textContent = labels[0];
+                if (label2Ref.current) label2Ref.current.textContent = labels[1];
+                if (label3Ref.current) label3Ref.current.textContent = labels[2];
+            },
+        });
+        tl.to([label1Ref.current, label2Ref.current, label3Ref.current], {
+            opacity: 1,
+            y: 0,
+            duration: 0.4,
+            stagger: 0.05,
+            delay: 0.1,
         });
     }, []);
 
+    useEffect(() => {
+        if (!svgRef.current) return;
+
+        // Gentle floating
+        gsap.to(svgRef.current, {
+            rotation: 6,
+            duration: 14,
+            ease: "sine.inOut",
+            repeat: -1,
+            yoyo: true,
+            transformOrigin: "center",
+        });
+
+        // Node pulse
+        nodesRef.current.forEach((node, i) => {
+            if (node) {
+                gsap.to(node, {
+                    attr: { r: NODE_RADII[i] * 1.12 },
+                    duration: 2.5 + i * 0.2,
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true,
+                    delay: i * 0.1,
+                });
+            }
+        });
+
+        // Bond shimmer
+        bondsRef.current.forEach((bond, i) => {
+            if (bond) {
+                gsap.to(bond, {
+                    opacity: 0.12,
+                    duration: 3 + i * 0.15,
+                    ease: "sine.inOut",
+                    repeat: -1,
+                    yoyo: true,
+                });
+            }
+        });
+
+        // Orbit
+        if (orbitRef.current) {
+            gsap.to(orbitRef.current, {
+                rotation: 360,
+                duration: 20,
+                ease: "none",
+                repeat: -1,
+                transformOrigin: `${CX}px ${CY}px`,
+            });
+        }
+
+        // Shape cycling: morph every 5 seconds
+        const interval = setInterval(() => {
+            shapeIndexRef.current = (shapeIndexRef.current + 1) % SHAPE_NAMES.length;
+            morphTo(SHAPE_NAMES[shapeIndexRef.current]);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, [morphTo]);
+
+    const initialShape = SHAPES.molecule;
+    const initialBonds = BONDS_MAP.molecule;
+
     return (
         <div className="molecule-wrapper">
-            {/* Glow backdrop */}
             <div className="molecule-glow" />
 
             <svg
@@ -87,75 +262,66 @@ export function Molecule() {
                 className="molecule-svg"
                 fill="none"
             >
-                <g ref={groupRef}>
-                    {/* Bonds */}
-                    {BONDS.map(([from, to], i) => (
-                        <line
-                            key={`bond-${i}`}
-                            className="mol-bond"
-                            x1={CX + NODES[from].x}
-                            y1={CY + NODES[from].y}
-                            x2={CX + NODES[to].x}
-                            y2={CY + NODES[to].y}
-                            stroke="rgba(107, 158, 130, 0.35)"
-                            strokeWidth="1"
+                {/* Bonds */}
+                {initialBonds.map(([from, to], i) => (
+                    <line
+                        key={`bond-${i}`}
+                        ref={(el) => { bondsRef.current[i] = el; }}
+                        className="mol-bond"
+                        x1={CX + initialShape[from].x}
+                        y1={CY + initialShape[from].y}
+                        x2={CX + initialShape[to].x}
+                        y2={CY + initialShape[to].y}
+                        stroke="rgba(139, 184, 158, 0.4)"
+                        strokeWidth="1"
+                    />
+                ))}
+
+                {/* Orbit ring for primary node */}
+                <circle
+                    ref={orbitRef}
+                    cx={CX}
+                    cy={CY}
+                    r={34}
+                    fill="none"
+                    stroke="rgba(107, 158, 130, 0.15)"
+                    strokeWidth="1"
+                    strokeDasharray="3 5"
+                    className="mol-orbit"
+                />
+
+                {/* Nodes */}
+                {initialShape.map((pos, i) => (
+                    <g key={`node-${i}`}>
+                        <circle
+                            ref={(el) => { nodesRef.current[i] = el; }}
+                            className="mol-node"
+                            cx={CX + pos.x}
+                            cy={CY + pos.y}
+                            r={NODE_RADII[i]}
+                            fill={i === 0
+                                ? "rgba(107, 158, 130, 0.65)"
+                                : `rgba(107, 158, 130, ${0.3 + (NODE_RADII[i] / 35)})`
+                            }
+                            stroke={`rgba(139, 184, 158, ${i === 0 ? 0.6 : 0.35})`}
+                            strokeWidth={i === 0 ? 1.5 : 1}
                         />
-                    ))}
-
-                    {/* Nodes */}
-                    {NODES.map((node, i) => (
-                        <g key={`node-${i}`}>
-                            {/* Outer glow ring for primary */}
-                            {node.primary && (
-                                <circle
-                                    cx={CX + node.x}
-                                    cy={CY + node.y}
-                                    r={node.r + 12}
-                                    fill="none"
-                                    stroke="rgba(107, 158, 130, 0.12)"
-                                    strokeWidth="1"
-                                    strokeDasharray="3 4"
-                                    className="mol-orbit"
-                                />
-                            )}
-
-                            {/* Node */}
-                            <circle
-                                className="mol-node"
-                                cx={CX + node.x}
-                                cy={CY + node.y}
-                                r={node.r}
-                                fill={node.primary
-                                    ? "rgba(107, 158, 130, 0.6)"
-                                    : `rgba(107, 158, 130, ${0.25 + (node.r / 40)})`
-                                }
-                                stroke={`rgba(139, 184, 158, ${node.primary ? 0.6 : 0.3})`}
-                                strokeWidth={node.primary ? 1.5 : 1}
-                            />
-
-                            {/* Inner highlight */}
-                            <circle
-                                cx={CX + node.x - node.r * 0.25}
-                                cy={CY + node.y - node.r * 0.25}
-                                r={node.r * 0.35}
-                                fill="rgba(255, 255, 255, 0.08)"
-                            />
-                        </g>
-                    ))}
-                </g>
+                        <circle
+                            ref={(el) => { highlightsRef.current[i] = el; }}
+                            cx={CX + pos.x - NODE_RADII[i] * 0.25}
+                            cy={CY + pos.y - NODE_RADII[i] * 0.25}
+                            r={NODE_RADII[i] * 0.3}
+                            fill="rgba(255, 255, 255, 0.1)"
+                        />
+                    </g>
+                ))}
             </svg>
 
-            {/* Data annotations */}
-            <div className="mol-annotation mol-ann-1">
-                <span className="mol-ann-value">Gly</span>
-                <span className="mol-ann-label">Glycine</span>
-            </div>
-            <div className="mol-annotation mol-ann-2">
-                <span className="mol-ann-value">C₂H₅NO₂</span>
-            </div>
-            <div className="mol-annotation mol-ann-3">
-                <span className="mol-ann-value">75.03</span>
-                <span className="mol-ann-label">g/mol</span>
+            {/* Annotation card */}
+            <div className="mol-annotation mol-ann-main">
+                <span className="mol-ann-value" ref={label1Ref}>Gly</span>
+                <span className="mol-ann-label" ref={label2Ref}>Glycine</span>
+                <span className="mol-ann-sub" ref={label3Ref}>75.03 g/mol</span>
             </div>
         </div>
     );
