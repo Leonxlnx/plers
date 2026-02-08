@@ -2,14 +2,11 @@
 
 import { useEffect, useState } from "react";
 
-const NAV_ITEMS = ["Research", "Platform", "About", "Careers"];
-
 export function Navbar() {
     const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const timer = setTimeout(() => setVisible(true), 300);
-        return () => clearTimeout(timer);
+        setTimeout(() => setVisible(true), 200);
     }, []);
 
     return (
@@ -17,8 +14,8 @@ export function Navbar() {
             className="nav"
             style={{
                 opacity: visible ? 1 : 0,
-                transform: visible ? "translateY(0)" : "translateY(-8px)",
-                transition: "all 0.9s cubic-bezier(0.16, 1, 0.3, 1)",
+                transform: visible ? "translateY(0)" : "translateY(-6px)",
+                transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
             }}
         >
             <a href="/" className="nav-logo">
@@ -27,11 +24,9 @@ export function Navbar() {
             </a>
 
             <ul className="nav-links">
-                {NAV_ITEMS.map((item) => (
+                {["Research", "Platform", "About", "Contact"].map((item) => (
                     <li key={item}>
-                        <a href={`#${item.toLowerCase()}`} className="nav-link">
-                            {item}
-                        </a>
+                        <a href={`#${item.toLowerCase()}`} className="nav-link">{item}</a>
                     </li>
                 ))}
             </ul>
