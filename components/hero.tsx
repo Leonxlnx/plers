@@ -12,7 +12,7 @@ export function Hero() {
     const descRef = useRef<HTMLParagraphElement>(null);
     const ctaRef = useRef<HTMLDivElement>(null);
     const specimenRef = useRef<HTMLDivElement>(null);
-    const scrollRef = useRef<HTMLDivElement>(null);
+
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -58,9 +58,6 @@ export function Hero() {
                 duration: 1.4,
                 ease: "power2.out",
             }, "-=0.8");
-
-            // Scroll indicator
-            tl.to(scrollRef.current, { opacity: 1, duration: 0.8 }, "-=0.3");
         }, containerRef);
 
         return () => ctx.revert();
@@ -124,12 +121,6 @@ export function Hero() {
                 >
                     <Specimen />
                 </div>
-            </div>
-
-            {/* Scroll Indicator */}
-            <div className="scroll-indicator" ref={scrollRef}>
-                <span>Scroll</span>
-                <div className="scroll-line" />
             </div>
         </section>
     );

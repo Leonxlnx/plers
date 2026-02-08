@@ -358,6 +358,7 @@ button {
 .hero-specimen-wrapper {
   align-self: center;
   justify-self: center;
+  filter: drop-shadow(0 0 40px rgba(107, 158, 130, 0.08));
 }
 
 .specimen {
@@ -370,7 +371,7 @@ button {
 .specimen-ring {
   position: absolute;
   inset: 0;
-  border: 1px dashed rgba(107, 158, 130, 0.25);
+  border: 1px dashed rgba(107, 158, 130, 0.45);
   border-radius: 50%;
   animation: ring-rotate 45s linear infinite;
 }
@@ -378,7 +379,7 @@ button {
 .specimen-ring-inner {
   position: absolute;
   inset: 12px;
-  border: 1px solid rgba(107, 158, 130, 0.08);
+  border: 1px solid rgba(107, 158, 130, 0.18);
   border-radius: 50%;
   animation: ring-rotate 60s linear infinite reverse;
 }
@@ -393,7 +394,7 @@ button {
 .crosshair-h,
 .crosshair-v {
   position: absolute;
-  background: rgba(107, 158, 130, 0.08);
+  background: rgba(107, 158, 130, 0.18);
   z-index: 1;
 }
 
@@ -434,8 +435,8 @@ button {
   height: 52px;
   top: 25%;
   left: 20%;
-  background: radial-gradient(circle at 35% 35%, rgba(107, 158, 130, 0.18), rgba(107, 158, 130, 0.04));
-  border: 1px solid rgba(107, 158, 130, 0.12);
+  background: radial-gradient(circle at 35% 35%, rgba(107, 158, 130, 0.35), rgba(107, 158, 130, 0.08));
+  border: 1px solid rgba(107, 158, 130, 0.25);
   animation: cell-float-1 8s ease-in-out infinite;
 }
 
@@ -444,8 +445,8 @@ button {
   height: 36px;
   top: 55%;
   left: 60%;
-  background: radial-gradient(circle at 40% 30%, rgba(107, 158, 130, 0.14), rgba(107, 158, 130, 0.02));
-  border: 1px solid rgba(107, 158, 130, 0.08);
+  background: radial-gradient(circle at 40% 30%, rgba(107, 158, 130, 0.3), rgba(107, 158, 130, 0.06));
+  border: 1px solid rgba(107, 158, 130, 0.2);
   animation: cell-float-2 10s ease-in-out infinite;
 }
 
@@ -454,7 +455,7 @@ button {
   height: 18px;
   top: 15%;
   left: 55%;
-  background: rgba(107, 158, 130, 0.12);
+  background: rgba(107, 158, 130, 0.28);
   animation: cell-float-3 6s ease-in-out infinite;
 }
 
@@ -463,8 +464,8 @@ button {
   height: 28px;
   top: 65%;
   left: 28%;
-  background: radial-gradient(circle at 30% 30%, rgba(107, 158, 130, 0.16), transparent);
-  border: 1px solid rgba(107, 158, 130, 0.06);
+  background: radial-gradient(circle at 30% 30%, rgba(107, 158, 130, 0.3), transparent);
+  border: 1px solid rgba(107, 158, 130, 0.18);
   animation: cell-float-1 12s ease-in-out infinite reverse;
 }
 
@@ -473,7 +474,7 @@ button {
   height: 10px;
   top: 40%;
   left: 75%;
-  background: rgba(107, 158, 130, 0.15);
+  background: rgba(107, 158, 130, 0.3);
   animation: cell-float-2 7s ease-in-out infinite;
 }
 
@@ -482,8 +483,8 @@ button {
   height: 42px;
   top: 38%;
   left: 38%;
-  background: radial-gradient(circle at 45% 40%, rgba(139, 184, 158, 0.1), transparent);
-  border: 1px solid rgba(107, 158, 130, 0.06);
+  background: radial-gradient(circle at 45% 40%, rgba(139, 184, 158, 0.22), transparent);
+  border: 1px solid rgba(107, 158, 130, 0.14);
   animation: cell-float-3 14s ease-in-out infinite;
 }
 
@@ -492,7 +493,7 @@ button {
   height: 14px;
   top: 78%;
   left: 52%;
-  background: rgba(107, 158, 130, 0.1);
+  background: rgba(107, 158, 130, 0.25);
   animation: cell-float-1 9s ease-in-out infinite;
 }
 
@@ -501,7 +502,7 @@ button {
   height: 8px;
   top: 30%;
   left: 72%;
-  background: rgba(139, 184, 158, 0.2);
+  background: rgba(139, 184, 158, 0.35);
   animation: cell-float-2 5s ease-in-out infinite reverse;
 }
 
@@ -557,7 +558,7 @@ button {
   width: 60px;
   height: 60px;
   transform: translate(-50%, -50%);
-  border: 1px solid rgba(107, 158, 130, 0.12);
+  border: 1px solid rgba(107, 158, 130, 0.22);
   border-radius: 50%;
   animation: focus-pulse 3s ease-in-out infinite;
 }
@@ -587,7 +588,7 @@ button {
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.32);
 }
 
 .label-top {
@@ -629,7 +630,7 @@ button {
 .corner-mark::after {
   content: '';
   position: absolute;
-  background: rgba(107, 158, 130, 0.2);
+  background: rgba(107, 158, 130, 0.35);
 }
 
 .corner-mark::before {
@@ -702,51 +703,6 @@ button {
   right: 0;
 }
 
-/* ============================================
-   SCROLL INDICATOR
-   ============================================ */
-
-.scroll-indicator {
-  position: absolute;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  opacity: 0;
-}
-
-.scroll-indicator span {
-  font-size: 0.45rem;
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.2);
-}
-
-.scroll-line {
-  width: 1px;
-  height: 28px;
-  background: linear-gradient(to bottom, rgba(107, 158, 130, 0.4), transparent);
-  animation: scroll-pulse 2.5s ease-in-out infinite;
-}
-
-@keyframes scroll-pulse {
-
-  0%,
-  100% {
-    opacity: 0.3;
-    transform: scaleY(0.7);
-  }
-
-  50% {
-    opacity: 1;
-    transform: scaleY(1);
-  }
-}
 
 /* ============================================
    RESPONSIVE
