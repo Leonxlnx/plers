@@ -2,32 +2,39 @@
 
 import { useEffect, useState } from "react";
 
+const NAV_ITEMS = ["Research", "Platform", "About", "Careers"];
+
 export function Navbar() {
-    const [scrolled, setScrolled] = useState(false);
+    const [visible, setVisible] = useState(false);
 
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 50);
-        window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
+        const timer = setTimeout(() => setVisible(true), 400);
+        return () => clearTimeout(timer);
     }, []);
 
     return (
-        <nav className={`navbar ${scrolled ? "scrolled" : ""}`}>
+        <nav
+            className="nav"
+            style={{
+                opacity: visible ? 1 : 0,
+                transform: visible ? "translateY(0)" : "translateY(-10px)",
+                transition: "all 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
+        >
             <a href="/" className="nav-logo">
-                <span className="logo-dot" />
-                <span>plers</span>
+                <span className="nav-dot" />
+                plers
             </a>
 
             <ul className="nav-links">
-                <li><a href="#research" className="nav-link">Forschung</a></li>
-                <li><a href="#technology" className="nav-link">Technologie</a></li>
-                <li><a href="#about" className="nav-link">Über uns</a></li>
-                <li><a href="#careers" className="nav-link">Karriere</a></li>
+                {NAV_ITEMS.map((item) => (
+                    <li key={item}>
+                        <a href={`#${item.toLowerCase()}`} className="nav-link">
+                            {item}
+                        </a>
+                    </li>
+                ))}
             </ul>
-
-            <a href="#contact" className="nav-cta">
-                Kontakt
-            </a>
         </nav>
     );
 }

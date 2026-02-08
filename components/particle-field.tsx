@@ -9,34 +9,30 @@ interface Particle {
     vy: number;
     radius: number;
     opacity: number;
-    opacitySpeed: number;
+    opacityDir: number;
     hue: number;
-    connections: number[];
 }
 
 export function ParticleField() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const mouseRef = useRef({ x: -1000, y: -1000 });
     const particlesRef = useRef<Particle[]>([]);
-    const animationRef = useRef<number>(0);
+    const animRef = useRef<number>(0);
 
-    const PARTICLE_COUNT = 60;
-    const CONNECTION_DISTANCE = 180;
-    const MOUSE_RADIUS = 250;
+    const COUNT = 35;
+    const CONNECT_DIST = 160;
 
-    const initParticles = useCallback((width: number, height: number) => {
+    const init = useCallback((w: number, h: number) => {
         const particles: Particle[] = [];
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
+        for (let i = 0; i < COUNT; i++) {
             particles.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.3,
-                vy: (Math.random() - 0.5) * 0.3,
-                radius: Math.random() * 2 + 0.5,
-                opacity: Math.random() * 0.5 + 0.1,
-                opacitySpeed: (Math.random() - 0.5) * 0.005,
-                hue: Math.random() > 0.7 ? 174 : 152, // cyan or green
-                connections: [],
+                x: Math.random() * w,
+                y: Math.random() * h,
+                vx: (Math.random() - 0.5) * 0.15,
+                vy: (Math.random() - 0.5) * 0.15,
+                radius: Math.random() * 1.5 + 0.3,
+                opacity: Math.random() * 0.3 + 0.05,
+                opacityDir: (Math.random() - 0.5) * 0.003,
+                hue: Math.random() > 0.75 ? 174 : 152,
             });
         }
         particlesRef.current = particles;
@@ -45,7 +41,6 @@ export function ParticleField() {
     useEffect(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
-
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
@@ -56,109 +51,71 @@ export function ParticleField() {
             canvas.style.width = `${window.innerWidth}px`;
             canvas.style.height = `${window.innerHeight}px`;
             ctx.scale(dpr, dpr);
-            initParticles(window.innerWidth, window.innerHeight);
-        };
-
-        const handleMouse = (e: MouseEvent) => {
-            mouseRef.current = { x: e.clientX, y: e.clientY };
+            init(window.innerWidth, window.innerHeight);
         };
 
         resize();
         window.addEventListener("resize", resize);
-        window.addEventListener("mousemove", handleMouse);
 
         const animate = () => {
             const w = window.innerWidth;
             const h = window.innerHeight;
             ctx.clearRect(0, 0, w, h);
 
-            const particles = particlesRef.current;
-            const mouse = mouseRef.current;
+            const ps = particlesRef.current;
 
-            // Update & draw particles
-            for (let i = 0; i < particles.length; i++) {
-                const p = particles[i];
-
-                // Mouse repulsion (subtle)
-                const dx = p.x - mouse.x;
-                const dy = p.y - mouse.y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (dist < MOUSE_RADIUS) {
-                    const force = (MOUSE_RADIUS - dist) / MOUSE_RADIUS;
-                    p.vx += (dx / dist) * force * 0.015;
-                    p.vy += (dy / dist) * force * 0.015;
-                }
-
-                // Move
+            for (const p of ps) {
                 p.x += p.vx;
                 p.y += p.vy;
+                if (p.x < -5) p.x = w + 5;
+                if (p.x > w + 5) p.x = -5;
+                if (p.y < -5) p.y = h + 5;
+                if (p.y > h + 5) p.y = -5;
 
-                // Friction
-                p.vx *= 0.999;
-                p.vy *= 0.999;
+                p.opacity += p.opacityDir;
+                if (p.opacity < 0.03 || p.opacity > 0.35) p.opacityDir *= -1;
 
-                // Wrap around
-                if (p.x < -10) p.x = w + 10;
-                if (p.x > w + 10) p.x = -10;
-                if (p.y < -10) p.y = h + 10;
-                if (p.y > h + 10) p.y = -10;
-
-                // Breathe opacity
-                p.opacity += p.opacitySpeed;
-                if (p.opacity <= 0.05 || p.opacity >= 0.6) {
-                    p.opacitySpeed *= -1;
-                }
-
-                // Draw particle with glow
+                // Particle
                 ctx.beginPath();
                 ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
                 ctx.fillStyle = `hsla(${p.hue}, 100%, 65%, ${p.opacity})`;
                 ctx.fill();
 
-                // Outer glow
+                // Glow
                 ctx.beginPath();
-                ctx.arc(p.x, p.y, p.radius * 4, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${p.hue}, 100%, 65%, ${p.opacity * 0.08})`;
+                ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${p.hue}, 100%, 65%, ${p.opacity * 0.06})`;
                 ctx.fill();
             }
 
-            // Draw connections
-            for (let i = 0; i < particles.length; i++) {
-                for (let j = i + 1; j < particles.length; j++) {
-                    const dx = particles[i].x - particles[j].x;
-                    const dy = particles[i].y - particles[j].y;
+            // Connections
+            for (let i = 0; i < ps.length; i++) {
+                for (let j = i + 1; j < ps.length; j++) {
+                    const dx = ps[i].x - ps[j].x;
+                    const dy = ps[i].y - ps[j].y;
                     const dist = Math.sqrt(dx * dx + dy * dy);
-
-                    if (dist < CONNECTION_DISTANCE) {
-                        const opacity = (1 - dist / CONNECTION_DISTANCE) * 0.12;
+                    if (dist < CONNECT_DIST) {
+                        const alpha = (1 - dist / CONNECT_DIST) * 0.06;
                         ctx.beginPath();
-                        ctx.moveTo(particles[i].x, particles[i].y);
-                        ctx.lineTo(particles[j].x, particles[j].y);
-                        ctx.strokeStyle = `hsla(152, 100%, 65%, ${opacity})`;
-                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(ps[i].x, ps[i].y);
+                        ctx.lineTo(ps[j].x, ps[j].y);
+                        ctx.strokeStyle = `hsla(152, 100%, 65%, ${alpha})`;
+                        ctx.lineWidth = 0.4;
                         ctx.stroke();
                     }
                 }
             }
 
-            animationRef.current = requestAnimationFrame(animate);
+            animRef.current = requestAnimationFrame(animate);
         };
 
         animate();
 
         return () => {
             window.removeEventListener("resize", resize);
-            window.removeEventListener("mousemove", handleMouse);
-            cancelAnimationFrame(animationRef.current);
+            cancelAnimationFrame(animRef.current);
         };
-    }, [initParticles]);
+    }, [init]);
 
-    return (
-        <canvas
-            ref={canvasRef}
-            className="hero-canvas"
-            aria-hidden="true"
-        />
-    );
+    return <canvas ref={canvasRef} className="particle-canvas" aria-hidden="true" />;
 }

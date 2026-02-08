@@ -3,222 +3,256 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ParticleField } from "./particle-field";
+import { DataStream } from "./data-stream";
+
+const DNA_SEQUENCE =
+    "ATCGATCG TTAGCCAA GCTTAAGG CCGGAATT ATCGATCG TTAGCCAA GCTTAAGG CCGGAATT ATCGATCG TTAGCCAA GCTTAAGG CCGGAATT ATCGATCG TTAGCCAA GCTTAAGG CCGGAATT ";
 
 export function Hero() {
     const heroRef = useRef<HTMLDivElement>(null);
     const labelRef = useRef<HTMLDivElement>(null);
     const headlineRef = useRef<HTMLHeadingElement>(null);
-    const descRef = useRef<HTMLParagraphElement>(null);
-    const actionsRef = useRef<HTMLDivElement>(null);
-    const statsRef = useRef<HTMLDivElement>(null);
+    const bodyRef = useRef<HTMLParagraphElement>(null);
+    const ctaRef = useRef<HTMLDivElement>(null);
+    const blobRef = useRef<HTMLDivElement>(null);
+    const badgeRef = useRef<HTMLDivElement>(null);
+    const annotationsRef = useRef<HTMLDivElement[]>([]);
     const scrollRef = useRef<HTMLDivElement>(null);
+    const tickerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
             const tl = gsap.timeline({
                 defaults: { ease: "power4.out" },
-                delay: 0.3,
+                delay: 0.5,
             });
 
-            // Animate the label badge
-            tl.fromTo(
-                labelRef.current,
-                { opacity: 0, y: 20, scale: 0.95 },
-                { opacity: 1, y: 0, scale: 1, duration: 0.8 }
-            );
-
-            // Animate each headline line sliding up
+            // 1. Headline lines reveal (the star moment)
             const lineInners = headlineRef.current?.querySelectorAll(".line-inner");
             if (lineInners) {
-                tl.to(
-                    lineInners,
-                    {
-                        y: "0%",
-                        duration: 1.2,
-                        stagger: 0.1,
-                        ease: "power4.out",
-                    },
-                    "-=0.4"
-                );
+                tl.to(lineInners, {
+                    y: "0%",
+                    duration: 1.4,
+                    stagger: 0.12,
+                    ease: "power4.out",
+                });
             }
 
-            // Animate description
+            // 2. Label slides in
             tl.fromTo(
-                descRef.current,
-                { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, duration: 0.8 },
-                "-=0.6"
+                labelRef.current,
+                { opacity: 0, x: -20 },
+                { opacity: 1, x: 0, duration: 0.8 },
+                "-=0.8"
             );
 
-            // Animate CTA buttons
-            const buttons = actionsRef.current?.children;
-            if (buttons) {
-                tl.fromTo(
-                    buttons,
-                    { opacity: 0, y: 20 },
-                    { opacity: 1, y: 0, duration: 0.6, stagger: 0.15 },
-                    "-=0.4"
-                );
-            }
+            // 3. Body text
+            tl.fromTo(
+                bodyRef.current,
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.7 },
+                "-=0.4"
+            );
 
-            // Animate stats
-            const stats = statsRef.current?.children;
-            if (stats) {
+            // 4. CTA buttons
+            const ctaChildren = ctaRef.current?.children;
+            if (ctaChildren) {
                 tl.fromTo(
-                    stats,
+                    ctaChildren,
                     { opacity: 0, y: 15 },
-                    { opacity: 1, y: 0, duration: 0.5, stagger: 0.1 },
+                    { opacity: 1, y: 0, duration: 0.6, stagger: 0.12 },
                     "-=0.3"
                 );
             }
 
-            // Animate scroll indicator
+            // 5. Blob scales in with organic ease
             tl.fromTo(
-                scrollRef.current,
-                { opacity: 0 },
-                { opacity: 1, duration: 0.6 },
-                "-=0.2"
+                blobRef.current,
+                { opacity: 0, scale: 0.6 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1.5,
+                    ease: "elastic.out(1, 0.5)",
+                },
+                "-=1.2"
             );
 
-            // Stats counter animation
-            const counters = statsRef.current?.querySelectorAll("[data-count]");
-            if (counters) {
-                counters.forEach((el) => {
-                    const target = parseFloat(el.getAttribute("data-count") || "0");
-                    const suffix = el.getAttribute("data-suffix") || "";
-                    const isDecimal = target % 1 !== 0;
+            // 6. Rotating badge
+            tl.fromTo(
+                badgeRef.current,
+                { opacity: 0, scale: 0.5, rotation: -90 },
+                { opacity: 1, scale: 1, rotation: 0, duration: 1, ease: "power3.out" },
+                "-=1.0"
+            );
 
-                    gsap.fromTo(
-                        { val: 0 },
-                        { val: target },
-                        {
-                            val: target,
-                            duration: 2,
-                            delay: 1.5,
-                            ease: "power2.out",
-                            onUpdate: function () {
-                                const current = this.targets()[0].val;
-                                el.textContent = isDecimal
-                                    ? current.toFixed(1) + suffix
-                                    : Math.floor(current) + suffix;
-                            },
-                        }
-                    );
-                });
+            // 7. Lab annotations stagger in
+            if (annotationsRef.current.length) {
+                tl.fromTo(
+                    annotationsRef.current,
+                    { opacity: 0 },
+                    { opacity: 0.5, duration: 0.6, stagger: 0.15 },
+                    "-=0.8"
+                );
             }
+
+            // 8. DNA ticker
+            tl.fromTo(
+                tickerRef.current,
+                { opacity: 0 },
+                { opacity: 1, duration: 0.8 },
+                "-=0.4"
+            );
+
+            // 9. Scroll hint
+            tl.fromTo(
+                scrollRef.current,
+                { opacity: 0, y: 10 },
+                { opacity: 1, y: 0, duration: 0.5 },
+                "-=0.3"
+            );
         }, heroRef);
 
         return () => ctx.revert();
     }, []);
 
+    const addAnnotationRef = (el: HTMLDivElement | null) => {
+        if (el && !annotationsRef.current.includes(el)) {
+            annotationsRef.current.push(el);
+        }
+    };
+
     return (
         <section className="hero" ref={heroRef}>
-            {/* Background layers */}
-            <div className="hero-bg-gradient" aria-hidden="true" />
-            <div className="hero-grid" aria-hidden="true" />
-
-            {/* Particle system */}
+            {/* === BACKGROUND LAYERS === */}
+            <div className="hero-ambient" aria-hidden="true" />
+            <div className="hero-dots" aria-hidden="true" />
             <ParticleField />
+            <div className="hero-scanline" aria-hidden="true" />
+            <div className="hero-pulse-line" aria-hidden="true" />
 
-            {/* Main content */}
-            <div className="hero-content">
-                <div className="hero-label" ref={labelRef} style={{ opacity: 0 }}>
-                    <span className="hero-label-dot" />
-                    Biotech · KI · Genomik
+            {/* === DNA TICKER === */}
+            <div className="dna-ticker" ref={tickerRef} style={{ opacity: 0 }} aria-hidden="true">
+                <div className="dna-ticker-inner">
+                    {DNA_SEQUENCE.repeat(4)}
                 </div>
+            </div>
 
-                <h1 className="hero-headline" ref={headlineRef}>
-                    <span className="line">
-                        <span className="line-inner">Die Zukunft der</span>
-                    </span>
-                    <span className="line">
-                        <span className="line-inner">Medizin beginnt</span>
-                    </span>
-                    <span className="line">
-                        <span className="line-inner">
-                            auf <span className="highlight">molekularer</span> Ebene.
+            {/* === DATA STREAM (right edge) === */}
+            <DataStream />
+
+            {/* === MAIN LAYOUT === */}
+            <div className="hero-layout">
+                {/* LEFT: Typography & Content */}
+                <div className="hero-text">
+                    <div
+                        className="hero-label"
+                        ref={labelRef}
+                        style={{ opacity: 0 }}
+                    >
+                        Biosciences — Zürich, CH — Est. 2019
+                    </div>
+
+                    <h1 className="hero-headline" ref={headlineRef}>
+                        <span className="line">
+                            <span className="line-inner headline-outline">Engineering</span>
                         </span>
-                    </span>
-                </h1>
+                        <span className="line">
+                            <span className="line-inner headline-light">tomorrow&apos;s</span>
+                        </span>
+                        <span className="line">
+                            <span className="line-inner headline-accent">
+                                health<span className="period">.</span>
+                            </span>
+                        </span>
+                    </h1>
 
-                <p className="hero-description" ref={descRef} style={{ opacity: 0 }}>
-                    Plers verbindet Biotechnologie mit künstlicher Intelligenz, um
-                    personalisierte Therapien zu entwickeln, die das Potenzial haben,
-                    Millionen von Leben zu verändern.
-                </p>
+                    <p className="hero-body" ref={bodyRef} style={{ opacity: 0 }}>
+                        We merge biotechnology with artificial intelligence to develop
+                        personalized therapies with the potential to transform millions
+                        of lives worldwide.
+                    </p>
 
-                <div className="hero-actions" ref={actionsRef}>
-                    <button className="btn-primary">
-                        <span>Unsere Forschung</span>
-                        <svg
-                            className="btn-arrow"
-                            width="16"
-                            height="16"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                        >
-                            <path
-                                d="M3 8H13M13 8L9 4M13 8L9 12"
-                                stroke="currentColor"
-                                strokeWidth="1.5"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
+                    <div className="hero-cta" ref={ctaRef}>
+                        <button className="cta-primary">
+                            <span>Explore our research</span>
+                            <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                                <path
+                                    d="M3 8H13M13 8L9 4M13 8L9 12"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+                        </button>
+                        <button className="cta-secondary">
+                            Read the science
+                        </button>
+                    </div>
+                </div>
+
+                {/* RIGHT: Visual elements */}
+                <div className="hero-visual">
+                    <div className="blob-container" ref={blobRef} style={{ opacity: 0 }}>
+                        <div className="morphing-blob">
+                            <div className="blob-nucleus" />
+                        </div>
+                    </div>
+
+                    {/* Rotating text badge */}
+                    <div className="rotating-badge" ref={badgeRef} style={{ opacity: 0 }}>
+                        <div className="badge-center-dot" />
+                        <svg viewBox="0 0 200 200">
+                            <defs>
+                                <path
+                                    id="circlePath"
+                                    d="M 100 100 m -72 0 a 72 72 0 1 1 144 0 a 72 72 0 1 1 -144 0"
+                                />
+                            </defs>
+                            <text>
+                                <textPath href="#circlePath" textLength="450">
+                                    PLERS BIOSCIENCES • ENGINEERING TOMORROW&apos;S HEALTH • EST 2019 •
+                                </textPath>
+                            </text>
                         </svg>
-                    </button>
-                    <button className="btn-secondary">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <circle
-                                cx="8"
-                                cy="8"
-                                r="6"
-                                stroke="currentColor"
-                                strokeWidth="1"
-                                opacity="0.5"
-                            />
-                            <path
-                                d="M6.5 5.5L10.5 8L6.5 10.5V5.5Z"
-                                fill="currentColor"
-                                opacity="0.7"
-                            />
-                        </svg>
-                        Showreel ansehen
-                    </button>
+                    </div>
                 </div>
             </div>
 
-            {/* Stats bar */}
-            <div className="hero-stats" ref={statsRef}>
-                <div className="hero-stat" style={{ opacity: 0 }}>
-                    <span className="hero-stat-value">
-                        <span data-count="150" data-suffix="+">0</span>
-                        <span className="accent">+</span>
-                    </span>
-                    <span className="hero-stat-label">Forschungsprojekte</span>
-                </div>
-                <div className="hero-stat" style={{ opacity: 0 }}>
-                    <span className="hero-stat-value">
-                        <span data-count="12" data-suffix="">0</span>
-                    </span>
-                    <span className="hero-stat-label">Klinische Studien</span>
-                </div>
-                <div className="hero-stat" style={{ opacity: 0 }}>
-                    <span className="hero-stat-value">
-                        <span data-count="40" data-suffix="+">0</span>
-                        <span className="accent">+</span>
-                    </span>
-                    <span className="hero-stat-label">Patente</span>
-                </div>
-                <div className="hero-stat" style={{ opacity: 0 }}>
-                    <span className="hero-stat-value">
-                        <span data-count="2.3" data-suffix=" Mrd.">0</span>
-                    </span>
-                    <span className="hero-stat-label">Datenpunkte analysiert</span>
-                </div>
+            {/* === LAB ANNOTATIONS === */}
+            <div
+                className="lab-annotation top-right"
+                ref={addAnnotationRef}
+                style={{ opacity: 0 }}
+            >
+                <span className="label-key">loc</span> 47.3769°N, 8.5417°E
+                <br />
+                <span className="label-key">status</span> active
             </div>
 
-            {/* Scroll indicator */}
-            <div className="scroll-indicator" ref={scrollRef} style={{ opacity: 0 }}>
+            <div
+                className="lab-annotation bottom-left"
+                ref={addAnnotationRef}
+                style={{ opacity: 0 }}
+            >
+                <span className="label-key">specimen</span> PLR-201
+                <br />
+                <span className="label-key">phase</span> clinical trial III
+            </div>
+
+            <div
+                className="lab-annotation bottom-right"
+                ref={addAnnotationRef}
+                style={{ opacity: 0 }}
+            >
+                <span className="label-key">seq</span> 2.3B datapoints
+                <br />
+                <span className="label-key">uptime</span> 99.97%
+            </div>
+
+            {/* === SCROLL HINT === */}
+            <div className="scroll-hint" ref={scrollRef} style={{ opacity: 0 }}>
                 <span>Scroll</span>
                 <div className="scroll-line" />
             </div>

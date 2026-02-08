@@ -26,13 +26,8 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Plers BioSciences — Engineering Tomorrow's Health",
   description:
-    "Plers verbindet Biotechnologie mit künstlicher Intelligenz, um Therapien zu entwickeln, die Leben verändern. Genomik, KI-Diagnostik und personalisierte Medizin.",
+    "Plers merges biotechnology with artificial intelligence to develop personalized therapies with the potential to transform millions of lives.",
   keywords: ["biotech", "health-tech", "genomics", "AI diagnostics", "personalized medicine"],
-  openGraph: {
-    title: "Plers BioSciences — Engineering Tomorrow's Health",
-    description: "Revolutionizing medicine through biotechnology and artificial intelligence.",
-    type: "website",
-  },
 };
 
 export default function RootLayout({
@@ -41,10 +36,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de" className={`${inter.variable} ${syne.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${syne.variable} ${jetbrainsMono.variable}`}>
       <body>
         <LenisProvider>
-          <div className="grain-overlay" aria-hidden="true" />
+          <div className="grain" aria-hidden="true" />
           {children}
         </LenisProvider>
       </body>
